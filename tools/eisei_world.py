@@ -85,7 +85,13 @@ town('tS3', 'town4', 'S3', 'シンケイの町', 'yume3', 'yume4', back_label='�
     dict(x=12, y=10, look='villager2', talk=['町じゅうに、細い白い糸が張りめぐらされている。', 'さわると、ぴりっとしびれるんだ。']),
     dict(x=6, y=13, look='child', talk=['時計台の上に、大きな8本足の影がいたよ！']),
 ])
-field('yume4', 'field2', '働く人の国 西の高原', 'tS3', (16, 8), 'tS4', ['nyuron', 'jiritsu', 'pinboke', 'kinniku'], '← シンケイの町', 'リズムの町（準備中）')
+field('yume4', 'field2', '働く人の国 西の高原', 'tS3', (16, 8), 'tS4', ['nyuron', 'jiritsu', 'pinboke', 'kinniku', 'jinzou', 'hormon', 'taion', 'yofukashi'], '← シンケイの町', 'リズムの町')
+town('tS4', 'town5', 'S4', 'リズムの町', 'yume4', 'yume5', back_label='草原をぬけて、シンケイの町へ', fwd_label='ルールの城へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['もう何日も、夜に眠れないんだ。', '昼間は頭がぼんやりして、仕事にならないよ。'], aiko='S4'),
+    dict(x=12, y=10, look='villager2', talk=['町の大時計が、昼と夜をでたらめに鳴らすようになった。', 'あれじゃ、体のリズムがくるっちまう。']),
+    dict(x=6, y=13, look='child', talk=['夜中に、黒い馬が町を走っていくのを見たよ！ ひづめの音がしなかったの。']),
+])
+field('yume5', 'field3', '働く人の国 ルールの国ざかい', 'tS4', (16, 7), 'tK1', ['jinzou', 'hormon', 'taion', 'yofukashi'], '← リズムの町', 'ルールの城（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

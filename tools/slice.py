@@ -41,6 +41,28 @@ async def main():
         await run(300, "window.__d1===true")
         print('tutorial', await pg.evaluate("JSON.stringify([window.__game.state.flags, window.__game.state.items])"))
         await pg.screenshot(path='/tmp/e_after_tut.png')
+        ONLY = sys.argv[1:]
+        if ONLY:
+            pre = {'S2': 1, 'S3': 2, 'S4': 3, 'K1': 4}[ONLY[0]]
+            towns = ['S1', 'S2', 'S3', 'S4'][:pre]
+            await pg.evaluate("(ts) => { const g=window.__game, s=g.state; ts.forEach(t=>['1','2','3','4','boss'].forEach(k=>s.cleared[t+'-'+k]=true)); s.flags.join_seiri=true; s.flags.hoan=true; s.members.seiri=JSON.parse(JSON.stringify(g.world.base.seiri)); s.party=['hero','seiri']; s.skills=['mitate','kakuho']; Object.assign(s.members.hero,{lv:12,mhp:80,hp:80,mmp:30,mp:30,atk:20,def:12}); Object.assign(s.members.seiri,{lv:12,mhp:70,hp:70,mmp:30,mp:30,atk:18,def:12}); }", towns)
+            for T, fld in [(t, 'yume' + t[1]) for t in ONLY]:
+                for to in [fld, 't' + T]:
+                    await pg.evaluate("(to) => { const g=window.__game; window.__dd=false; g.field.busy=true; g.onEvent({type:'exit',to,tx:9,ty:14}).then(()=>{window.__dd=true; g.field.busy=false;}); }", to)
+                    await run(80, "window.__dd===true")
+                await pg.screenshot(path=f'/tmp/e_town_{T}.png')
+                for k in ['1', '2', '3', '4']:
+                    sid = T + '-' + k
+                    await pg.evaluate("(sid) => { const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.stage(sid).then(()=>{window.__dd=true; g.field.busy=false;}); }", sid)
+                    ok = await run(1500, "window.__dd===true"); print(sid, ok)
+                for i in range(14):
+                    if await pg.evaluate(f"window.__game.meter('{T}').pct") >= 80: break
+                    await pg.evaluate(f"() => {{ const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.train('{T}').then(()=>{{window.__dd=true; g.field.busy=false;}}); }}")
+                    await run(1500, "window.__dd===true")
+                await pg.evaluate(f"() => {{ const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.stage('{T}-boss').then(()=>{{window.__dd=true; g.field.busy=false;}}); }}")
+                await run(40); await pg.screenshot(path=f'/tmp/e_boss_{T}.png')
+                ok = await run(2500, "window.__dd===true"); print(T, 'boss', ok, await pg.evaluate("JSON.stringify(Object.keys(window.__game.state.cleared).length)"), await pg.evaluate("JSON.stringify(window.__game.state.party)"))
+            print('noq', await pg.evaluate('window.__noq||[]')); print('\n'.join(errs) or 'no errors'); await b.close(); return
         # 草原→町
         await pg.evaluate("() => { const g=window.__game; g.field.busy=true; g.onEvent({type:'exit',to:'yume1',tx:9,ty:16}).then(()=>{window.__d2=true; g.field.busy=false;}); }")
         await run(50, "window.__d2===true")

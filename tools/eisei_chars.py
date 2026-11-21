@@ -16,7 +16,7 @@ CH = dict(
                   '合格は科目ごと40%以上・合計60%以上。苦手な科目を作らないことです。']),
     ),
     subjectMember={'労働生理': 'seiri', '関係法令': 'houki', '関係法令（有害）': 'houki', '労働衛生': 'kanki', '労働衛生（有害）': 'sokutei'},
-    boss={'S3-boss': dict(lie='暗いところに目が慣れる暗順応は、明るさに慣れる明順応より、ずっと早いのだ！', who='セイリ', fix='暗順応のほうが時間がかかるの。暗い所に入ったら、目が慣れるまで待ってから動くのよ。'), 'S2-boss': dict(lie='基礎代謝量とは、ぐっすり眠っているときに使うエネルギーのことだ！', who='セイリ', fix='基礎代謝量は、目覚めて横になり、安静にしているときの最小限のエネルギーよ。睡眠中ではないわ。'), 'S1-boss': dict(lie='肺動脈には、酸素たっぷりの動脈血が流れているのだ！', who='セイリ', fix='肺動脈に流れるのは静脈血。酸素の多い動脈血が流れるのは肺静脈よ。名前と中身が逆なの。')},
+    boss={'S4-boss': dict(lie='眠りをさそうメラトニンは、朝の光をあびるとたくさん出るのだ！', who='セイリ', fix='メラトニンは松果体から、主に夜に出るの。朝の光はメラトニンをおさえて、体を目覚めさせるのよ。'), 'S3-boss': dict(lie='暗いところに目が慣れる暗順応は、明るさに慣れる明順応より、ずっと早いのだ！', who='セイリ', fix='暗順応のほうが時間がかかるの。暗い所に入ったら、目が慣れるまで待ってから動くのよ。'), 'S2-boss': dict(lie='基礎代謝量とは、ぐっすり眠っているときに使うエネルギーのことだ！', who='セイリ', fix='基礎代謝量は、目覚めて横になり、安静にしているときの最小限のエネルギーよ。睡眠中ではないわ。'), 'S1-boss': dict(lie='肺動脈には、酸素たっぷりの動脈血が流れているのだ！', who='セイリ', fix='肺動脈に流れるのは静脈血。酸素の多い動脈血が流れるのは肺静脈よ。名前と中身が逆なの。')},
 )
 json.dump(CH, open(os.path.join(D, 'characters.json'), 'w'), ensure_ascii=False, indent=1)
 
@@ -37,7 +37,11 @@ AK = dict(tips=[
     dict(id='AK302', town='S3', topic='自律神経', word='「交感神経」と「消化管」', ans='交感神経は消化管の運動をおさえる。活発にするのは副交感神経。'),
     dict(id='AK303', town='S3', topic='視覚と聴覚', word='「錐状体」「杆状体」', ans='錐状体＝明るい所・色、杆状体＝暗い所・明暗。暗順応は明順応より時間がかかる。'),
     dict(id='AK304', town='S3', topic='ほかの感覚と筋肉', word='「心筋」', ans='横紋筋だが、意思では動かせない不随意筋。'),
-], freq=['自律神経', '視覚と聴覚', '心臓と循環', '凝固と凝集', '免疫', '代謝', '栄養と消化', '肝臓'])
+    dict(id='AK401', town='S4', topic='腎臓と尿', word='「糸球体」と「尿細管」', ans='糸球体でこす（血球・たんぱく質は残る）、尿細管で再吸収（ブドウ糖はふつう全部もどる）。'),
+    dict(id='AK402', town='S4', topic='ホルモン', word='「血糖値を下げる」', ans='インスリンだけ。グルカゴン・アドレナリン・コルチゾールは上げる。'),
+    dict(id='AK403', town='S4', topic='体温調節', word='「暑いとき」「寒いとき」の皮膚の血管', ans='暑い＝広がる（拡張）、寒い＝縮まる（収縮）。中枢は視床下部。'),
+    dict(id='AK404', town='S4', topic='睡眠と疲労・ストレス', word='「レム睡眠」', ans='体は休むが脳は活動して夢を見やすい。ノンレム睡眠は脳も休む。'),
+], freq=['ホルモン', '腎臓と尿', '自律神経', '視覚と聴覚', '心臓と循環', '凝固と凝集', '免疫', '代謝', '栄養と消化', '肝臓'])
 json.dump(AK, open(os.path.join(D, 'aikotoba.json'), 'w'), ensure_ascii=False, indent=1)
 
 SY = dict(note='出題範囲を細かい項目に分けたプロジェクト独自のチェックリスト（公式の項目表ではない）。kid_prefixes に一致する knowledge_id の問題があれば網羅済みとみなす。', items=[
@@ -52,6 +56,10 @@ SY = dict(note='出題範囲を細かい項目に分けたプロジェクト独�
     dict(id='S-10', subject='労働生理', area='神経', item='自律神経（交感神経・副交感神経）', kid_prefixes=['S3-AUT-']),
     dict(id='S-11', subject='労働生理', area='感覚', item='視覚・聴覚・平衡感覚', kid_prefixes=['S3-EYE', 'S3-EAR']),
     dict(id='S-12', subject='労働生理', area='感覚・筋肉', item='嗅覚・皮膚感覚・深部感覚、筋肉', kid_prefixes=['S3-SENSE', 'S3-MUSCLE']),
+    dict(id='S-13', subject='労働生理', area='腎臓', item='腎臓・尿の生成・尿検査', kid_prefixes=['S4-KID-']),
+    dict(id='S-14', subject='労働生理', area='内分泌', item='ホルモン', kid_prefixes=['S4-HOR-']),
+    dict(id='S-15', subject='労働生理', area='体温', item='体温調節・恒常性', kid_prefixes=['S4-TEMP']),
+    dict(id='S-16', subject='労働生理', area='睡眠・疲労', item='睡眠・概日リズム・疲労・ストレス', kid_prefixes=['S4-SLEEP', 'S4-FATIGUE', 'S4-STRESS']),
     dict(id='S-04', subject='労働生理', area='血液', item='血液の凝固と凝集、血清', kid_prefixes=['S1-COAG', 'S1-AGGL', 'S1-SERUM']),
 ])
 json.dump(SY, open(os.path.join(D, 'syllabus.json'), 'w'), ensure_ascii=False, indent=1)

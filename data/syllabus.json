@@ -103,6 +103,44 @@
    ]
   },
   {
+   "id": "S-13",
+   "subject": "労働生理",
+   "area": "腎臓",
+   "item": "腎臓・尿の生成・尿検査",
+   "kid_prefixes": [
+    "S4-KID-"
+   ]
+  },
+  {
+   "id": "S-14",
+   "subject": "労働生理",
+   "area": "内分泌",
+   "item": "ホルモン",
+   "kid_prefixes": [
+    "S4-HOR-"
+   ]
+  },
+  {
+   "id": "S-15",
+   "subject": "労働生理",
+   "area": "体温",
+   "item": "体温調節・恒常性",
+   "kid_prefixes": [
+    "S4-TEMP"
+   ]
+  },
+  {
+   "id": "S-16",
+   "subject": "労働生理",
+   "area": "睡眠・疲労",
+   "item": "睡眠・概日リズム・疲労・ストレス",
+   "kid_prefixes": [
+    "S4-SLEEP",
+    "S4-FATIGUE",
+    "S4-STRESS"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

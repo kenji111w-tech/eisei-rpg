@@ -213,6 +213,49 @@
    ]
   },
   {
+   "id": "K-08",
+   "subject": "関係法令",
+   "area": "事務所衛生基準",
+   "item": "気積・換気・温度",
+   "kid_prefixes": [
+    "K3-KISEKI",
+    "K3-KANKI",
+    "K3-ONDO"
+   ]
+  },
+  {
+   "id": "K-09",
+   "subject": "関係法令",
+   "area": "事務所衛生基準",
+   "item": "空気調和設備の基準・測定・点検",
+   "kid_prefixes": [
+    "K3-KUCHOU",
+    "K3-SOKUTEI",
+    "K3-REIKYAKU"
+   ]
+  },
+  {
+   "id": "K-10",
+   "subject": "関係法令",
+   "area": "事務所衛生基準",
+   "item": "照度・清掃・燃焼器具",
+   "kid_prefixes": [
+    "K3-SHOUDO",
+    "K3-SEISOU",
+    "K3-NENSHOU"
+   ]
+  },
+  {
+   "id": "K-11",
+   "subject": "関係法令",
+   "area": "事務所衛生基準",
+   "item": "便所・休養室",
+   "kid_prefixes": [
+    "K3-BENJO",
+    "K3-KYUYOU"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

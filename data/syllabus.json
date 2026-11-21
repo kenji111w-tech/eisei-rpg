@@ -334,6 +334,45 @@
    ]
   },
   {
+   "id": "Y-10",
+   "subject": "労働衛生（有害）",
+   "area": "対策",
+   "item": "3管理と作業環境測定・管理区分",
+   "kid_prefixes": [
+    "Y4-SANKANRI",
+    "Y4-SOKUTEI",
+    "Y4-KANRIKUBUN"
+   ]
+  },
+  {
+   "id": "Y-11",
+   "subject": "労働衛生（有害）",
+   "area": "対策",
+   "item": "局所排気装置",
+   "kid_prefixes": [
+    "Y4-KYOKUHAI"
+   ]
+  },
+  {
+   "id": "Y-12",
+   "subject": "労働衛生（有害）",
+   "area": "対策",
+   "item": "呼吸用保護具",
+   "kid_prefixes": [
+    "Y4-HOGOGU"
+   ]
+  },
+  {
+   "id": "Y-13",
+   "subject": "労働衛生（有害）",
+   "area": "対策",
+   "item": "特殊健康診断と生物学的モニタリング",
+   "kid_prefixes": [
+    "Y4-TOKKEN",
+    "Y4-BIO"
+   ]
+  },
+  {
    "id": "Y-07",
    "subject": "労働衛生（有害）",
    "area": "物理的要因",

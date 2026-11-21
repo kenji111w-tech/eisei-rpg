@@ -162,7 +162,13 @@ town('tY3', 'town5', 'Y3', 'ブツリの鉱山', 'yume15', 'yume16', office='鉱
     dict(x=12, y=10, look='villager2', talk=['寒い朝になると、指が真っ白になるんだ。', 'ドリルを毎日にぎってるせいかな……。']),
     dict(x=6, y=13, look='child', talk=['谷底に、角のはえた大きなけものがいるんだって！ 機械をバリバリ食べてるの！']),
 ])
-field('yume16', 'field3', '働く人の国 峠道', 'tY3', (16, 7), 'tY4', ['souon', 'shindou', 'housha', 'genatsu'], '← ブツリの鉱山', 'タイサクの鉱山（準備中）')
+field('yume16', 'field3', '働く人の国 峠道', 'tY3', (16, 7), 'tY4', ['souon', 'shindou', 'housha', 'genatsu'], '← ブツリの鉱山', 'タイサクの鉱山')
+town('tY4', 'town6', 'Y4', 'タイサクの鉱山', 'yume16', 'yume17', office='測定事務所', bgm='town_chem', back_label='峠道をぬけて、ブツリの鉱山へ', fwd_label='キセイの砦へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['局所排気装置が止まってから、工場の中がけむたくてな。', 'マスクも、どれを使えばいいのかわからないんだ。'], aiko='Y4'),
+    dict(x=12, y=10, look='villager2', talk=['特殊健康診断？ ここ何年も受けてないよ。', '記録も、どこにあるのやら。']),
+    dict(x=6, y=13, look='child', talk=['大きな煙突のてっぺんに、黒いドラゴンがいるよ！']),
+])
+field('yume17', 'field2', '働く人の国 法令の川', 'tY4', (16, 8), 'tZ1', ['hakarazu', 'gyakufuu', 'nomask', 'mimic'], '← タイサクの鉱山', 'キセイの砦（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

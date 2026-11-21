@@ -156,7 +156,13 @@ town('tY2', 'town4', 'Y2', 'フンジンの鉱山', 'yume14', 'yume15', office='
     dict(x=12, y=10, look='villager2', talk=['たて穴に落ちた仲間を助けに入ったやつまで、たおれちまった。', '穴の中には、何もないように見えたのに……。']),
     dict(x=6, y=13, look='child', talk=['山のてっぺんに、砂でできた大きな人がいるんだよ！']),
 ])
-field('yume15', 'field2', '働く人の国 谷ぞいの道', 'tY2', (16, 8), 'tY3', ['jinpai', 'keisand', 'sanketsu', 'chissoboss'], '← フンジンの鉱山', 'ブツリの鉱山（準備中）')
+field('yume15', 'field2', '働く人の国 谷ぞいの道', 'tY2', (16, 8), 'tY3', ['jinpai', 'keisand', 'sanketsu', 'chissoboss'], '← フンジンの鉱山', 'ブツリの鉱山')
+town('tY3', 'town5', 'Y3', 'ブツリの鉱山', 'yume15', 'yume16', office='鉱山の事務所', bgm='town_chem', back_label='谷ぞいに、フンジンの鉱山へ', fwd_label='タイサクの鉱山へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['え？ なんだって？ ……最近、高い音が聞こえにくくてな。', '機械の音には、もうなれたと思ってたんだが。'], aiko='Y3'),
+    dict(x=12, y=10, look='villager2', talk=['寒い朝になると、指が真っ白になるんだ。', 'ドリルを毎日にぎってるせいかな……。']),
+    dict(x=6, y=13, look='child', talk=['谷底に、角のはえた大きなけものがいるんだって！ 機械をバリバリ食べてるの！']),
+])
+field('yume16', 'field3', '働く人の国 峠道', 'tY3', (16, 7), 'tY4', ['souon', 'shindou', 'housha', 'genatsu'], '← ブツリの鉱山', 'タイサクの鉱山（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

@@ -334,6 +334,35 @@
    ]
   },
   {
+   "id": "Y-07",
+   "subject": "労働衛生（有害）",
+   "area": "物理的要因",
+   "item": "騒音と振動",
+   "kid_prefixes": [
+    "Y3-SOUON",
+    "Y3-SHINDOU"
+   ]
+  },
+  {
+   "id": "Y-08",
+   "subject": "労働衛生（有害）",
+   "area": "物理的要因",
+   "item": "電離放射線と非電離放射線",
+   "kid_prefixes": [
+    "Y3-HOUSHA"
+   ]
+  },
+  {
+   "id": "Y-09",
+   "subject": "労働衛生（有害）",
+   "area": "物理的要因",
+   "item": "熱中症・低体温症・異常気圧",
+   "kid_prefixes": [
+    "Y3-ONNETSU",
+    "Y3-KIATSU"
+   ]
+  },
+  {
    "id": "Y-05",
    "subject": "労働衛生（有害）",
    "area": "粉じん・酸欠",

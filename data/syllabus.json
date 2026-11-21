@@ -334,6 +334,45 @@
    ]
   },
   {
+   "id": "Z-01",
+   "subject": "関係法令（有害）",
+   "area": "規制のしくみ",
+   "item": "作業主任者",
+   "kid_prefixes": [
+    "Z1-SAGYOU"
+   ]
+  },
+  {
+   "id": "Z-02",
+   "subject": "関係法令（有害）",
+   "area": "規制のしくみ",
+   "item": "特別教育",
+   "kid_prefixes": [
+    "Z1-KYOUIKU"
+   ]
+  },
+  {
+   "id": "Z-03",
+   "subject": "関係法令（有害）",
+   "area": "規制のしくみ",
+   "item": "製造禁止物質と製造許可物質",
+   "kid_prefixes": [
+    "Z1-KINSHI",
+    "Z1-KYOKA"
+   ]
+  },
+  {
+   "id": "Z-04",
+   "subject": "関係法令（有害）",
+   "area": "規制のしくみ",
+   "item": "表示・SDS・リスクアセスメント・定期自主検査・型式検定",
+   "kid_prefixes": [
+    "Z1-HYOUJI",
+    "Z1-RA",
+    "Z1-JISHU"
+   ]
+  },
+  {
    "id": "Y-10",
    "subject": "労働衛生（有害）",
    "area": "対策",

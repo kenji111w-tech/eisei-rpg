@@ -2301,3 +2301,59 @@ Object.assign(ENEMY_HQ, {
     ctx.save(); ctx.globalAlpha = .5; for (let i = 0; i < 6; i++) { const ph = (t / 25 + i / 6) % 1; glow(ctx, cx + R * (-.7 + i * .28), cy - R * (.3 + ph * .6), R * (.08 + ph * .12), 'rgba(80,80,80,.9)', 'rgba(60,60,60,0)'); } ctx.restore();
   },
 });
+
+// ===== 衛生管理者RPGの魔物（キセイの砦） =====
+Object.assign(ENEMY_HQ, {
+  // フザイ・アーマー：中身のない空っぽのよろい。かぶとの中はまっ暗
+  fuzai(ctx, cx, cy, R, t) {
+    const st = lin(ctx, cx - R * .5, 0, cx + R * .5, 0, ['#d8dce4', '#8a909a', '#4a505a']);
+    ctx.fillStyle = st; ctx.beginPath(); ctx.moveTo(cx - R * .4, cy - R * .2); ctx.lineTo(cx + R * .4, cy - R * .2); ctx.lineTo(cx + R * .3, cy + R * .45); ctx.lineTo(cx - R * .3, cy + R * .45); ctx.fill();
+    ctx.fillRect(cx - R * .28, cy + R * .45, R * .2, R * .45); ctx.fillRect(cx + R * .08, cy + R * .45, R * .2, R * .45);
+    [-1, 1].forEach(s => { ctx.beginPath(); ctx.ellipse(cx + s * R * .48, cy - R * .15, R * .16, R * .1, 0, 0, 7); ctx.fill(); ctx.fillRect(cx + s * R * .5 - R * .08, cy - R * .1, R * .16, R * .45); });
+    const fy = Math.sin(t / 10) * R * .06; ctx.beginPath(); ctx.arc(cx, cy - R * .5 + fy, R * .24, Math.PI, 0); ctx.lineTo(cx + R * .24, cy - R * .3 + fy); ctx.lineTo(cx - R * .24, cy - R * .3 + fy); ctx.fill();
+    ctx.fillStyle = '#0a0a10'; ctx.fillRect(cx - R * .16, cy - R * .52 + fy, R * .32, R * .07);
+    ctx.fillStyle = `rgba(120,200,255,${.4 + .4 * Math.sin(t / 5)})`; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * R * .07, cy - R * .485 + fy, R * .02, 0, 7); ctx.fill(); });
+    ctx.fillStyle = '#c03030'; ctx.beginPath(); ctx.moveTo(cx, cy - R * .74 + fy); ctx.quadraticCurveTo(cx + R * .25, cy - R * .9 + fy, cx + R * .3, cy - R * .6 + fy); ctx.lineTo(cx, cy - R * .7 + fy); ctx.fill();
+  },
+  // ムキョウイク・インプ：教科書をやぶる赤い小悪魔
+  mukyouiku(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 5) * R * .05;
+    ctx.fillStyle = '#c04040'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .2 + b, R * .28, R * .32, 0, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(cx, cy - R * .25 + b, R * .25, 0, 7); ctx.fill();
+    [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .15, cy - R * .42 + b); ctx.lineTo(cx + s * R * .25, cy - R * .65 + b); ctx.lineTo(cx + s * R * .22, cy - R * .38 + b); ctx.fill(); });
+    ctx.fillStyle = '#5a1a1a'; [-1, 1].forEach(s => { ctx.save(); ctx.translate(cx + s * R * .25, cy + b); ctx.rotate(s * (.4 + Math.sin(t / 3) * .2)); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(s * R * .5, -R * .3); ctx.lineTo(s * R * .4, R * .05); ctx.lineTo(s * R * .5, R * .15); ctx.closePath(); ctx.fill(); ctx.restore(); });
+    eyes(ctx, cx, cy - R * .27 + b, R * .1, R * .05);
+    ctx.strokeStyle = '#2a0a0a'; ctx.lineWidth = R * .025; ctx.beginPath(); ctx.arc(cx, cy - R * .18 + b, R * .08, .2, Math.PI - .2); ctx.stroke();
+    for (let i = 0; i < 4; i++) { const ph = (t / 18 + i / 4) % 1; ctx.save(); ctx.translate(cx + R * (-.6 + i * .4), cy + R * (.7 - ph * .4)); ctx.rotate(ph * 4 + i); ctx.globalAlpha = 1 - ph; ctx.fillStyle = '#fff'; ctx.fillRect(-R * .07, -R * .09, R * .14, R * .18); ctx.fillStyle = '#888'; ctx.fillRect(-R * .05, -R * .05, R * .1, R * .015); ctx.fillRect(-R * .05, 0, R * .1, R * .015); ctx.restore(); }
+  },
+  // ヤミセイゾウ・ゴーレム：フラスコを持った紫の石の巨人。胸に禁止マーク
+  yamiseizou(ctx, cx, cy, R, t) {
+    const st = lin(ctx, cx - R, 0, cx + R, 0, ['#8a7a9a', '#5a4a6a', '#2a1a3a']);
+    ctx.fillStyle = st; rr(ctx, cx - R * .45, cy - R * .35, R * .9, R * .85, R * .15); ctx.fill();
+    ctx.fillRect(cx - R * .35, cy + R * .5, R * .25, R * .4); ctx.fillRect(cx + R * .1, cy + R * .5, R * .25, R * .4);
+    rr(ctx, cx - R * .22, cy - R * .72, R * .44, R * .38, R * .1); ctx.fill();
+    ctx.fillStyle = '#c0ff60'; [-1, 1].forEach(s => { ctx.fillRect(cx + s * R * .09 - R * .04, cy - R * .58, R * .08, R * .05); });
+    ctx.strokeStyle = '#ff3030'; ctx.lineWidth = R * .05; ctx.beginPath(); ctx.arc(cx, cy + R * .08, R * .2, 0, 7); ctx.stroke(); ctx.beginPath(); ctx.moveTo(cx - R * .14, cy - R * .06); ctx.lineTo(cx + R * .14, cy + R * .22); ctx.stroke();
+    ctx.fillStyle = st; ctx.fillRect(cx + R * .45, cy - R * .25, R * .2, R * .5);
+    ctx.fillStyle = 'rgba(200,255,100,.8)'; ctx.beginPath(); ctx.moveTo(cx + R * .6, cy - R * .45); ctx.lineTo(cx + R * .7, cy - R * .45); ctx.lineTo(cx + R * .82, cy - R * .2); ctx.lineTo(cx + R * .48, cy - R * .2); ctx.closePath(); ctx.fill();
+    for (let i = 0; i < 3; i++) { const ph = (t / 15 + i / 3) % 1; ctx.fillStyle = `rgba(200,255,100,${1 - ph})`; ctx.beginPath(); ctx.arc(cx + R * .65, cy - R * (.5 + ph * .3), R * .04, 0, 7); ctx.fill(); }
+  },
+  // ラベルナシ・ボトル：ラベルがはがれた薬品のびん。中で液体がゆれる
+  nolabel(ctx, cx, cy, R, t) {
+    ctx.fillStyle = 'rgba(200,230,255,.35)'; ctx.beginPath(); ctx.moveTo(cx - R * .15, cy - R * .8); ctx.lineTo(cx + R * .15, cy - R * .8); ctx.lineTo(cx + R * .15, cy - R * .45); ctx.quadraticCurveTo(cx + R * .5, cy - R * .35, cx + R * .5, cy); ctx.lineTo(cx + R * .5, cy + R * .7); ctx.lineTo(cx - R * .5, cy + R * .7); ctx.lineTo(cx - R * .5, cy); ctx.quadraticCurveTo(cx - R * .5, cy - R * .35, cx - R * .15, cy - R * .45); ctx.closePath(); ctx.fill();
+    const lv = cy + R * .05 + Math.sin(t / 6) * R * .04; ctx.fillStyle = 'rgba(140,60,200,.8)'; ctx.beginPath(); ctx.moveTo(cx - R * .5, lv); for (let i = 0; i <= 10; i++) ctx.lineTo(cx - R * .5 + i * R * .1, lv + Math.sin(t / 4 + i) * R * .02); ctx.lineTo(cx + R * .5, cy + R * .7); ctx.lineTo(cx - R * .5, cy + R * .7); ctx.fill();
+    ctx.fillStyle = '#6a4a2a'; ctx.fillRect(cx - R * .17, cy - R * .92, R * .34, R * .14);
+    ctx.save(); ctx.translate(cx + R * .3, cy + R * .3); ctx.rotate(.3 + Math.sin(t / 8) * .1); ctx.fillStyle = '#f4f0e0'; ctx.beginPath(); ctx.moveTo(0, -R * .2); ctx.lineTo(R * .35, -R * .15); ctx.lineTo(R * .3, R * .15); ctx.lineTo(R * .05, R * .1); ctx.fill(); ctx.fillStyle = '#888'; ctx.font = `bold ${R * .1}px sans-serif`; ctx.fillText('?', R * .14, R * .02); ctx.restore();
+    eyes(ctx, cx, cy + R * .3, R * .14, R * .06);
+  },
+  // ハンソク・ジェネラル：赤いマントの、よろいの将軍
+  hansoku(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#8a1a1a'; ctx.beginPath(); ctx.moveTo(cx - R * .45, cy - R * .35); ctx.quadraticCurveTo(cx - R * .7 + Math.sin(t / 8) * R * .05, cy + R * .4, cx - R * .55, cy + R * .9); ctx.lineTo(cx + R * .55, cy + R * .9); ctx.quadraticCurveTo(cx + R * .7 - Math.sin(t / 8) * R * .05, cy + R * .4, cx + R * .45, cy - R * .35); ctx.fill();
+    const st = lin(ctx, cx - R * .4, 0, cx + R * .4, 0, ['#e8d8a0', '#b09a50', '#6a5a28']);
+    ctx.fillStyle = st; ctx.beginPath(); ctx.moveTo(cx - R * .38, cy - R * .35); ctx.lineTo(cx + R * .38, cy - R * .35); ctx.lineTo(cx + R * .3, cy + R * .4); ctx.lineTo(cx - R * .3, cy + R * .4); ctx.fill();
+    ctx.fillRect(cx - R * .26, cy + R * .4, R * .2, R * .5); ctx.fillRect(cx + R * .06, cy + R * .4, R * .2, R * .5);
+    ctx.beginPath(); ctx.arc(cx, cy - R * .55, R * .22, Math.PI, 0); ctx.lineTo(cx + R * .22, cy - R * .38); ctx.lineTo(cx - R * .22, cy - R * .38); ctx.fill();
+    [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .18, cy - R * .68); ctx.quadraticCurveTo(cx + s * R * .45, cy - R * .85, cx + s * R * .4, cy - R * 1.0); ctx.quadraticCurveTo(cx + s * R * .35, cy - R * .8, cx + s * R * .12, cy - R * .72); ctx.fill(); });
+    ctx.fillStyle = '#0a0a0a'; ctx.fillRect(cx - R * .14, cy - R * .56, R * .28, R * .06); ctx.fillStyle = '#ff4020'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * R * .06, cy - R * .53, R * .02, 0, 7); ctx.fill(); });
+    ctx.strokeStyle = '#d0d4dc'; ctx.lineWidth = R * .05; ctx.beginPath(); ctx.moveTo(cx + R * .45, cy + R * .3); ctx.lineTo(cx + R * .85, cy - R * .6 + Math.sin(t / 6) * R * .05); ctx.stroke();
+  },
+});

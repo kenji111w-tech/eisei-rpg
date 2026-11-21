@@ -1,0 +1,43 @@
+{
+ "note": "出題範囲を細かい項目に分けたプロジェクト独自のチェックリスト（公式の項目表ではない）。kid_prefixes に一致する knowledge_id の問題があれば網羅済みとみなす。",
+ "items": [
+  {
+   "id": "S-01",
+   "subject": "労働生理",
+   "area": "血液",
+   "item": "血液の成分（血漿・赤血球・白血球・血小板）",
+   "kid_prefixes": [
+    "S1-BLD-"
+   ]
+  },
+  {
+   "id": "S-02",
+   "subject": "労働生理",
+   "area": "循環",
+   "item": "心臓の構造と血液循環",
+   "kid_prefixes": [
+    "S1-CIR-"
+   ]
+  },
+  {
+   "id": "S-03",
+   "subject": "労働生理",
+   "area": "免疫",
+   "item": "抗原・抗体、体液性免疫・細胞性免疫",
+   "kid_prefixes": [
+    "S1-IMM-"
+   ]
+  },
+  {
+   "id": "S-04",
+   "subject": "労働生理",
+   "area": "血液",
+   "item": "血液の凝固と凝集、血清",
+   "kid_prefixes": [
+    "S1-COAG",
+    "S1-AGGL",
+    "S1-SERUM"
+   ]
+  }
+ ]
+}

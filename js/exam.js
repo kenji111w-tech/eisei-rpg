@@ -1,0 +1,153 @@
+// 試験センター：本番と同じ形の模擬試験（ゲームの世界の外で受ける）
+import { el, shuffle, fmtMin, studyDay } from './util.js';
+import { Learn } from './learn.js';
+import { choose, say } from './ui.js';
+
+// 本番の形：法令15・物理化学10・性質消火10、2時間。科目ごとに6割以上で合格
+export const FORMS = {
+  honban: { name: '本番模試（初見・模試専用問題35問・2時間）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 120, mock: true },
+  full: { name: '練習模試（本番形式35問・2時間）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 120 },
+  retry: { name: '再挑戦模試（既出問題を含む・35問・2時間）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 120, retry: true },
+  menjo: { name: '練習模試（科目免除：性質・消火10問・35分）', parts: { '性質・消火': 10 }, minutes: 35, note: '乙種の他の類の免状を持っている人は、法令と物理・化学が免除されます。' },
+  weak: { name: '苦手中心の練習模試（35問・時間制限なし）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 0, weak: true },
+};
+
+export const CONF = { passRate: .6, totalRate: 0, recommend: { count: 3, rate: .8 } };
+export function applyConfig(c) { // data/config/exam.json の内容で上書きする
+  if (!c) return; if (c.passRate) CONF.passRate = c.passRate; if (c.totalRate) CONF.totalRate = c.totalRate; if (c.recommend) CONF.recommend = c.recommend;
+  for (const [k, f] of Object.entries(c.forms || {})) if (FORMS[k]) Object.assign(FORMS[k], f);
+}
+// 出題できる問題：習ったステージの五肢択一だけ（教える前に問わない）
+export function examPool(questions, cleared, all = false) {
+  return questions.filter(q => q.kind === 'mcq5' && !q.call && q.pool === 'practice' && q.topic !== 'identify' && q.subject in FORMS.full.parts &&
+    (all || q.town === 'V0' || cleared[`${q.town}-${q.stage}`]));
+}
+
+function score(q) { // 苦手度：まちがい・迷い・ヒント・遅い答えが多いほど高い
+  let s = 0; for (const a of Learn.d.answers) if (a.qid === q.id) s += (!a.correct || a.unsure || a.hint || a.ms > 20000) ? 1 : -.5; return s;
+}
+export function buildExam(pool, form) {
+  const out = [], seen = new Set(Learn.d.answers.filter(a => a.mode === 'mock').map(a => a.qid));
+  for (const [sj, n] of Object.entries(form.parts)) {
+    let cand = pool.filter(q => q.subject === sj);
+    if (form.weak) cand = shuffle(cand).sort((a, b) => score(b) - score(a));
+    else { // 模試で出ていない問題を優先し、同じ知識が続かないように散らす
+      const fresh = shuffle(cand.filter(q => !seen.has(q.id))), old = shuffle(cand.filter(q => seen.has(q.id)));
+      cand = fresh.concat(old);
+    }
+    const kids = new Set(), pickd = [];
+    for (const q of cand) { if (pickd.length >= n) break; if (kids.has(q.knowledge_id)) continue; kids.add(q.knowledge_id); pickd.push(q); }
+    for (const q of cand) { if (pickd.length >= n) break; if (!pickd.includes(q)) pickd.push(q); }
+    out.push(...pickd);
+  }
+  return out;
+}
+
+// 試験を受ける。戻り値：結果オブジェクト
+export function runExam(layer, qs, form, resume = null) {
+  return new Promise(res => {
+    const root = el('div', 'win exam'); layer.appendChild(root);
+    const ans = resume ? resume.ans : qs.map(() => null), mark = resume ? resume.mark : qs.map(() => false), orders = resume ? resume.orders : qs.map(q => shuffle(q.choices.map((c, i) => i)));
+    const t0 = resume ? resume.t0 : Date.now(), limit = form.minutes * 60e3; let cur = 0, timer = null, maxEl = resume ? resume.maxEl || 0 : 0;
+    const persist = () => { if (!form.mock) return; Learn.d.mockRun = { set: form.set, ids: qs.map(q => q.id), ans, mark, orders, t0, maxEl }; Learn.save(); };
+    persist();
+    const head = el('div', 'exhead'), tm = el('span', 'extime'), prog = el('span', 'exprog'); head.append(prog, tm); root.appendChild(head);
+    const body = el('div', 'exbody'); root.appendChild(body);
+    const nav = el('div', 'exnav'); root.appendChild(nav);
+    const elapsed = () => { const e = Math.max(maxEl, Date.now() - t0); maxEl = e; return e; }; // 時計が巻き戻っても経過時間は減らさない
+    const left = () => Math.max(0, limit - elapsed());
+    const tick = () => { if (limit) { const l = left(); tm.textContent = `残り ${Math.floor(l / 60e3)}分${String(Math.floor(l / 1e3) % 60).padStart(2, '0')}秒`; if (l <= 0) end(true); } else tm.textContent = `経過 ${fmtMin((Date.now() - t0) / 1e3)}`; };
+    const show = () => {
+      const q = qs[cur], labels = ['A', 'B', 'C', 'D', 'E'];
+      prog.textContent = `問${cur + 1}／${qs.length}（${q.subject}）　答えた数 ${ans.filter(a => a !== null).length}`;
+      body.innerHTML = '';
+      body.appendChild(el('div', 'qtext', q.question));
+      const list = el('div', 'choices');
+      orders[cur].forEach((oi, k) => { const b = el('button', 'choice' + (ans[cur] === oi ? ' sel' : '')); b.append(el('span', 'lab', labels[k]), el('span', 'ct', q.choices[oi])); b.onclick = () => { ans[cur] = oi; persist(); show(); }; list.appendChild(b); });
+      body.appendChild(list);
+      const mk = el('button', 'exmark' + (mark[cur] ? ' on' : ''), mark[cur] ? '★ 見直す印あり' : '☆ 見直す印をつける'); mk.onclick = () => { mark[cur] = !mark[cur]; persist(); show(); }; body.appendChild(mk);
+      nav.innerHTML = '';
+      const pv = el('button', 'exbtn', '← 前'); pv.disabled = cur === 0; pv.onclick = () => { cur--; show(); };
+      const nx = el('button', 'exbtn', cur === qs.length - 1 ? '一覧へ' : '次 →'); nx.onclick = () => { if (cur < qs.length - 1) { cur++; show(); } else grid(); };
+      const gl = el('button', 'exbtn', '一覧'); gl.onclick = grid;
+      nav.append(pv, gl, nx);
+    };
+    const grid = () => {
+      body.innerHTML = ''; prog.textContent = `答えた数 ${ans.filter(a => a !== null).length}／${qs.length}　★見直し ${mark.filter(Boolean).length}`;
+      const g = el('div', 'exgrid');
+      qs.forEach((q, i) => { const b = el('button', 'excell' + (ans[i] !== null ? ' done' : '') + (mark[i] ? ' mark' : ''), String(i + 1)); b.onclick = () => { cur = i; show(); }; g.appendChild(b); });
+      body.appendChild(el('div', 'exnote', '番号をタップすると、その問題に戻れます。白は未回答、★は見直す印です。'));
+      body.appendChild(g);
+      nav.innerHTML = '';
+      const bk = el('button', 'exbtn', '問題に戻る'); bk.onclick = show;
+      const fin = el('button', 'exbtn exfin', '採点する'); fin.onclick = async () => { const un = ans.filter(a => a === null).length; const ok = await choose(un ? `未回答が${un}問あります。採点しますか？（未回答は不正解）` : '採点しますか？', [{ label: '採点する', value: 1 }]); if (ok) end(false); };
+      if (form.mock) { const ab = el('button', 'exbtn', '中断'); ab.onclick = async () => { const ok = await choose('中断すると、この回は判定に数えず、問題を見たので使用済みになります。中断しますか？', [{ label: '中断する', value: 1 }]); if (ok) end(false, true); }; nav.append(ab); }
+      nav.append(bk, fin);
+    };
+    let done = false;
+    const end = (timeUp, aborted = false) => {
+      if (done) return; done = true; clearInterval(timer); root.remove();
+      if (form.mock) { delete Learn.d.mockRun; (Learn.d.mockSetsUsed = Learn.d.mockSetsUsed || []).includes(form.set) || Learn.d.mockSetsUsed.push(form.set); Learn.save(); }
+      if (aborted) return res({ aborted: true });
+      const ms = Math.min(elapsed(), limit || Infinity), by = {};
+      qs.forEach((q, i) => { const c = ans[i] === q.answer; (by[q.subject] = by[q.subject] || { n: 0, ok: 0 }).n++; if (c) by[q.subject].ok++;
+        Learn.record(q, { correct: c, unsure: mark[i], hint: false, mode: 'mock', order: orders[i], ms: Math.round(ms / qs.length) }); });
+      const tot = Object.values(by).reduce((a, v) => [a[0] + v.ok, a[1] + v.n], [0, 0]);
+      const pass = Object.values(by).every(v => v.ok / v.n >= CONF.passRate) && (!CONF.totalRate || tot[0] / Math.max(1, tot[1]) >= CONF.totalRate);
+      const r = { day: studyDay(), // 日本時間の学習日（朝4時区切り）。UTCだと朝9時前が前日になってしまう
+         form: form.name, by, pass, ms, timeUp, first: !!form.mock, ids: qs.map(q => q.id), ok: qs.map((q, i) => ans[i] === q.answer), wrong: qs.map((q, i) => ({ q, a: ans[i] })).filter(x => x.a !== x.q.answer).map(x => ({ id: x.q.id, a: x.a })) };
+      (Learn.d.mocks = Learn.d.mocks || []).push({ day: r.day, form: r.form, by, pass, ms, first: !!form.mock, set: form.set || null }); Learn.save();
+      res(r);
+    };
+    timer = setInterval(tick, 1000); tick(); if (!done) show();
+  });
+}
+
+export async function showResult(r, qById, where = null, areaOf = null) {
+  const lines = [`【採点結果】${r.form}${r.timeUp ? '（時間切れ）' : ''}`];
+  for (const [sj, v] of Object.entries(r.by)) { const p = Math.round(v.ok / v.n * 100); lines.push(`${sj}：${v.ok}／${v.n}問（${p}%）${v.ok / v.n >= CONF.passRate ? '　合格ライン到達' : '　あと' + (Math.ceil(v.n * CONF.passRate - 1e-9) - v.ok) + '問'}`); }
+  lines.push(r.pass ? '判定：合格！ すべての科目で6割以上です。' : '判定：不合格……。1科目でも6割に届かないと不合格です。');
+  lines.push(`かかった時間：${fmtMin(r.ms / 1e3)}`);
+  if (r.first) { const rc = recommend(); lines.push(rc.ok ? '初見模試を3回連続、3科目とも80%以上。推奨条件を満たしました。本番に挑戦しましょう！' : `推奨条件（初見模試3回連続・各科目80%以上）：直近${rc.n}回分で判定中。`); }
+  await say(lines);
+  if (areaOf && r.ids) { // 分野別：合格ラインに届かなかった分野
+    const ar = {}; r.ids.forEach((id, i) => { const q = qById[id], k = `${q.subject}／${areaOf(q.knowledge_id)}`; (ar[k] = ar[k] || { n: 0, ok: 0 }).n++; if (r.ok[i]) ar[k].ok++; });
+    const weak = Object.entries(ar).filter(([, v]) => v.ok / v.n < CONF.passRate).sort((a, b) => a[1].ok / a[1].n - b[1].ok / b[1].n);
+    await say(['【分野別の結果】'].concat(weak.length ? weak.map(([k, v]) => `${k}：${v.ok}／${v.n}問`).concat(['（合格ラインに届かなかった分野です）']) : ['すべての分野で合格ラインに届いています。']));
+  }
+  if (r.wrong.length && where) { // 次に学ぶ場所：まちがえた知識を教えている場所を、多い順に
+    const cnt = {}; for (const w of r.wrong) { const p = where(qById[w.id].knowledge_id); if (p) cnt[p] = (cnt[p] || 0) + 1; }
+    const top = Object.entries(cnt).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    if (top.length) await say(['【次に復習するとよい場所】'].concat(top.map(([p, n]) => `${p}（${n}問）`)).concat(['冒険の「にがて」や宿屋の手紙でも、まちがえた知識を復習できます。']));
+  }
+  if (!r.wrong.length) return;
+  const v = await choose(`まちがえた問題（${r.wrong.length}問）を見直しますか？`, [{ label: '見直す', value: 1 }, { label: 'あとで', value: 0 }], { cancel: false });
+  if (!v) return;
+  for (const w of r.wrong) {
+    const q = qById[w.id]; const mine = w.a === null ? '（未回答）' : q.choices[w.a];
+    await say([`【${q.subject}】${q.question}`, `あなたの答え：${mine}`, `正解：${q.choices[q.answer]}`, `解説：${q.explanation}`]);
+  }
+}
+
+// 推奨条件（プロジェクト独自）：初見模試を3回連続、各回とも3科目すべて80%以上
+export function recommend() {
+  const R = CONF.recommend, f = (Learn.d.mocks || []).filter(h => h.first).slice(-R.count);
+  const ok = f.length === R.count && f.every(h => Object.values(h.by).every(v => v.ok / v.n >= R.rate));
+  return { n: f.length, ok };
+}
+export function nextMockSet(questions) {
+  const used = new Set(Learn.d.mockSetsUsed || []), sets = [...new Set(questions.filter(q => q.pool === 'mock').map(q => q.mock_set))].sort((a, b) => a - b);
+  return sets.find(s => !used.has(s)) || null;
+}
+
+// 再挑戦模試：模試専用問題のうち、前回の出題から30日以上たったものを優先して35問を組む
+export function buildRetry(questions) {
+  const last = {}; for (const a of Learn.d.answers) if (a.mode === 'mock') last[a.qid] = Math.max(last[a.qid] || 0, a.ts || 0);
+  const out = [], old = Date.now() - 30 * 864e5;
+  for (const [sj, n] of Object.entries(FORMS.retry.parts)) {
+    const cand = shuffle(questions.filter(q => q.pool === 'mock' && q.subject === sj));
+    cand.sort((a, b) => ((last[a.id] || 0) > old) - ((last[b.id] || 0) > old) || (last[a.id] || 0) - (last[b.id] || 0));
+    out.push(...cand.slice(0, n));
+  }
+  return out;
+}

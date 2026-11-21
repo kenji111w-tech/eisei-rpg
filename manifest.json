@@ -1,0 +1,14 @@
+{
+ "name": "衛生管理者RPG ～働く人の国～",
+ "short_name": "衛生RPG",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#101020",
+ "theme_color": "#101020",
+ "icons": [
+  {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+  {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"}
+ ]
+}

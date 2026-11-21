@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="衛生RPG">
+<meta name="theme-color" content="#101020">
+<title>衛生管理者RPG ～働く人の国～（試作品）</title>
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <div id="trial" class="hide">お試し中：Safariで開いた画面のデータは、ホーム画面に追加した版と共有されません。共有ボタン→「ホーム画面に追加」から遊ぶのがおすすめです。<button id="trial-close" aria-label="閉じる">×</button></div>
+  <div id="field-wrap" class="hide"><canvas id="field"></canvas><div id="mapname"></div></div>
+  <div id="pad" class="hide">
+    <div class="stick" id="stick" aria-label="移動スティック"><div class="stick-ring"></div><div class="knob" id="knob"></div></div>
+    <div class="abtns">
+      <button id="btnA">しらべる<br>はなす</button>
+      <button id="btnM">メニュー</button>
+    </div>
+  </div>
+  <div id="ui"></div>
+  <div id="err" class="hide"></div>
+  <button id="update" class="hide">新しい版があります（タップで更新）</button>
+</div>
+<script type="module" src="js/game.js"></script>
+</body>
+</html>

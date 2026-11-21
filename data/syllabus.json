@@ -334,6 +334,43 @@
    ]
   },
   {
+   "id": "E-13",
+   "subject": "労働衛生",
+   "area": "健康管理",
+   "item": "食中毒（細菌・ウイルス・自然毒）",
+   "kid_prefixes": [
+    "E4-SAIKIN",
+    "E4-NORO"
+   ]
+  },
+  {
+   "id": "E-14",
+   "subject": "労働衛生",
+   "area": "健康管理",
+   "item": "感染症（感染経路・不顕性感染・日和見感染）",
+   "kid_prefixes": [
+    "E4-KANSEN"
+   ]
+  },
+  {
+   "id": "E-15",
+   "subject": "労働衛生",
+   "area": "救急処置",
+   "item": "一次救命処置（胸骨圧迫・AED）",
+   "kid_prefixes": [
+    "E4-BLS"
+   ]
+  },
+  {
+   "id": "E-16",
+   "subject": "労働衛生",
+   "area": "救急処置",
+   "item": "応急手当（止血・熱傷・骨折）",
+   "kid_prefixes": [
+    "E4-FA"
+   ]
+  },
+  {
    "id": "E-09",
    "subject": "労働衛生",
    "area": "健康管理",

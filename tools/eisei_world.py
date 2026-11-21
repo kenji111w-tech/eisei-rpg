@@ -133,7 +133,18 @@ town('tE3', 'town12', 'E3', 'ゲンキの森の里', 'yume11', 'yume12', office=
     dict(x=12, y=10, look='villager2', talk=['休け所が、たばこの煙でもうもうなんだ。', '吸わない人も、せきが止まらないよ。']),
     dict(x=6, y=13, look='child', talk=['黒いずきんの人が、大きな袋をかついで、古い蔵に入っていったよ！']),
 ])
-field('yume12', 'field2', '働く人の国 森の沢', 'tE3', (16, 8), 'tE4', ['utsuutsu', 'gorone', 'kemuri', 'gomakashi'], '← ゲンキの森の里', 'キュウキュウの森の里（準備中）')
+field('yume12', 'field2', '働く人の国 森の沢', 'tE3', (16, 8), 'tE4', ['utsuutsu', 'gorone', 'kemuri', 'gomakashi'], '← ゲンキの森の里', 'キュウキュウの森の里')
+# town3 には東の出口がないので、11行目に東への道と出口・看板を足す
+_t3 = BASE['town3']
+_r = _t3['tiles'][11]
+_t3['tiles'][11] = (_r[:8] + '=' * 10) if isinstance(_r, str) else (_r[:8] + ['='] * 10)
+_t3['events'] = [e for e in _t3['events'] if not (e['type'] == 'building' and e['id'] == 'koshujo')] + [dict(x=17, y=11, type='exit', to='x'), dict(x=16, y=10, type='sign', label='→東', text='')]
+town('tE4', 'town3', 'E4', 'キュウキュウの森の里', 'yume12', 'yume13', office='森の管理小屋', bgm='town_chem', back_label='沢ぞいに、ゲンキの森の里へ', fwd_label='工場の国へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['食堂で食べたら、みんなおなかをこわしたんだ。', '卵料理と、作り置きの煮物があやしい……。'], aiko='E4'),
+    dict(x=12, y=10, look='villager2', talk=['広場で人がたおれたのに、だれも何をしたらいいかわからなかった。', 'AEDって、どう使うんだい？']),
+    dict(x=6, y=13, look='child', talk=['とんがり帽子のおばあさんが、森の奥で大きなお鍋をかきまぜてたよ！']),
+])
+field('yume13', 'field4', '働く人の国 工場の国ざかい', 'tE4', (16, 11), 'tY1', ['dokutamago', 'noronoro', 'battari', 'houtai'], '← キュウキュウの森の里', '工場の国（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

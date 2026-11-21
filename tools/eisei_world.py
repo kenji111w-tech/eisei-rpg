@@ -144,7 +144,13 @@ town('tE4', 'town3', 'E4', 'キュウキュウの森の里', 'yume12', 'yume13',
     dict(x=12, y=10, look='villager2', talk=['広場で人がたおれたのに、だれも何をしたらいいかわからなかった。', 'AEDって、どう使うんだい？']),
     dict(x=6, y=13, look='child', talk=['とんがり帽子のおばあさんが、森の奥で大きなお鍋をかきまぜてたよ！']),
 ])
-field('yume13', 'field4', '働く人の国 工場の国ざかい', 'tE4', (16, 11), 'tY1', ['dokutamago', 'noronoro', 'battari', 'houtai'], '← キュウキュウの森の里', '工場の国（準備中）')
+field('yume13', 'field4', '働く人の国 工場の国ざかい', 'tE4', (16, 11), 'tY1', ['dokutamago', 'noronoro', 'battari', 'houtai'], '← キュウキュウの森の里', 'カガクの鉱山')
+town('tY1', 'town2', 'Y1', 'カガクの鉱山', 'yume13', 'yume14', office='鉱山の事務所', bgm='town_chem', back_label='国ざかいをぬけて、キュウキュウの森の里へ', fwd_label='フンジンの鉱山へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['坑道に入ると、頭がくらくらするんだ。', '手足もしびれてきた……。'], aiko='Y1'),
+    dict(x=12, y=10, look='villager2', talk=['精錬所の仲間が、おなかが痛いと言ってたおれた。', '顔色も、ずっと悪いんだ。']),
+    dict(x=6, y=13, look='child', talk=['鉱山の奥に、首がいっぱいある大きなヘビがいるんだって！']),
+])
+field('yume14', 'field3', '働く人の国 坑道ぞいの道', 'tY1', (16, 8), 'tY2', ['yuuki', 'namari', 'gasumore', 'joutai'], '← カガクの鉱山', 'フンジンの鉱山（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）
@@ -162,6 +168,7 @@ W = dict(
         hero=dict(id='hero', name='ユウ', lv=1, hp=30, mhp=30, mp=8, mmp=8, atk=9, def_=4),
         seiri=dict(id='seiri', name='セイリ', lv=1, hp=26, mhp=26, mp=10, mmp=10, atk=7, def_=5, bonusPrefix='S'),
         kanki=dict(id='kanki', name='カンキ', lv=20, hp=110, mhp=110, mp=40, mmp=40, atk=26, def_=20, bonusPrefix='EY'),
+        sokutei=dict(id='sokutei', name='ソクテイ', lv=24, hp=120, mhp=120, mp=50, mmp=50, atk=27, def_=21, bonusPrefix='YE'),
         houki=dict(id='houki', name='ホウキ', lv=12, hp=70, mhp=70, mp=30, mmp=30, atk=18, def_=13, bonusPrefix='KZ'),
     ),
     memberNames=dict(hero='主人公', seiri='セイリ', houki='ホウキ', kanki='カンキ', sokutei='ソクテイ'),

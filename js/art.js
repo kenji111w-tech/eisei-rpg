@@ -2077,3 +2077,62 @@ Object.assign(ENEMY_HQ, {
     ctx.save(); ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 4; i++) glow(ctx, cx + R * (.1 + i * .2), cy + R * .85, R * .12, 'rgba(255,140,40,.8)', 'rgba(255,60,0,0)'); ctx.restore();
   },
 });
+
+// ===== 衛生管理者RPGの魔物（カガクの鉱山） =====
+Object.assign(ENEMY_HQ, {
+  // ユウキヨウザイ・ミスト：ドラム缶からわき出る黄緑のもや
+  yuuki(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#3a6a9a'; rr(ctx, cx - R * .3, cy + R * .2, R * .6, R * .65, R * .05); ctx.fill();
+    ctx.strokeStyle = '#2a4a6a'; ctx.lineWidth = R * .03; [.35, .6].forEach(y => { ctx.beginPath(); ctx.moveTo(cx - R * .3, cy + R * y); ctx.lineTo(cx + R * .3, cy + R * y); ctx.stroke(); });
+    ctx.fillStyle = '#ffd040'; ctx.beginPath(); ctx.moveTo(cx, cy + R * .38); ctx.lineTo(cx + R * .1, cy + R * .55); ctx.lineTo(cx - R * .1, cy + R * .55); ctx.fill();
+    for (let i = 0; i < 9; i++) { const a = i / 9 * 6.28 + t / 40; glow(ctx, cx + Math.cos(a) * R * .35, cy - R * .25 + Math.sin(a) * R * .25, R * .28, 'rgba(200,240,120,.75)', 'rgba(120,200,60,0)'); }
+    eyes(ctx, cx, cy - R * .3, R * .17, R * .07);
+    ctx.strokeStyle = '#3a5a10'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(cx - R * .12, cy - R * .08); ctx.quadraticCurveTo(cx, cy - R * .15, cx + R * .12, cy - R * .08); ctx.stroke();
+  },
+  // ナマリ・ゴーレム：灰色の鉛のかたまりでできた巨人。胸に Pb
+  namari(ctx, cx, cy, R, t) {
+    const st = lin(ctx, cx - R, 0, cx + R, 0, ['#a8acb8', '#6a6e7a', '#3a3e48']);
+    ctx.fillStyle = st; ctx.fillRect(cx - R * .38, cy + R * .45, R * .25, R * .45); ctx.fillRect(cx + R * .13, cy + R * .45, R * .25, R * .45);
+    rr(ctx, cx - R * .5, cy - R * .4, R, R * .9, R * .12); ctx.fill();
+    const sw = Math.sin(t / 8) * R * .05; ctx.fillRect(cx - R * .8, cy - R * .3 + sw, R * .28, R * .6); ctx.fillRect(cx + R * .52, cy - R * .3 - sw, R * .28, R * .6);
+    rr(ctx, cx - R * .25, cy - R * .8, R * .5, R * .4, R * .08); ctx.fill();
+    ctx.fillStyle = '#ffb040'; [-1, 1].forEach(s => { ctx.fillRect(cx + s * R * .1 - R * .05, cy - R * .65, R * .1, R * .06); });
+    ctx.fillStyle = '#e8e8f0'; ctx.font = `bold ${R * .28}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('Pb', cx, cy);
+  },
+  // ガスモレ・ゴースト：うすく透けた、ほとんど見えない幽霊。配管から出てくる
+  gasumore(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#8a8a7a'; ctx.fillRect(cx - R * .9, cy + R * .55, R * .6, R * .14); ctx.fillStyle = '#6a6a5a'; ctx.fillRect(cx - R * .35, cy + R * .5, R * .1, R * .24);
+    const a = .35 + .2 * Math.sin(t / 6); ctx.save(); ctx.globalAlpha = a;
+    const g = ctx.createRadialGradient(cx, cy - R * .2, R * .1, cx, cy, R * .7); g.addColorStop(0, '#ffffff'); g.addColorStop(1, 'rgba(220,230,240,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx - R * .45, cy + R * .5); ctx.quadraticCurveTo(cx - R * .6, cy - R * .8, cx, cy - R * .75); ctx.quadraticCurveTo(cx + R * .6, cy - R * .8, cx + R * .45, cy + R * .5);
+    for (let i = 0; i < 4; i++) ctx.quadraticCurveTo(cx + R * (.33 - i * .23), cy + R * (.35 + (i % 2) * .25), cx + R * (.22 - i * .23), cy + R * .5); ctx.fill(); ctx.restore();
+    ctx.fillStyle = 'rgba(30,30,40,.8)'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.ellipse(cx + s * R * .15, cy - R * .3, R * .06, R * .1, 0, 0, 7); ctx.fill(); });
+    ctx.beginPath(); ctx.ellipse(cx, cy - R * .05, R * .08, R * .1, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.font = `bold ${R * .16}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('CO', cx + R * .6, cy - R * .6);
+  },
+  // ジョウタイ・カメレオン：体の色が変わり続けるカメレオン
+  joutai(ctx, cx, cy, R, t) {
+    const hue = (t * 3) % 360, c1 = `hsl(${hue},60%,55%)`, c2 = `hsl(${(hue + 40) % 360},60%,35%)`;
+    ctx.strokeStyle = '#6a4a20'; ctx.lineWidth = R * .08; ctx.beginPath(); ctx.moveTo(cx - R, cy + R * .5); ctx.lineTo(cx + R, cy + R * .45); ctx.stroke();
+    const g = ctx.createLinearGradient(cx - R * .6, 0, cx + R * .6, 0); g.addColorStop(0, c2); g.addColorStop(1, c1);
+    ctx.strokeStyle = g; ctx.lineWidth = R * .12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx - R * .45, cy + R * .15); ctx.bezierCurveTo(cx - R * .9, cy + R * .2, cx - R * .9, cy - R * .3, cx - R * .65, cy - R * .25); ctx.arc(cx - R * .72, cy - R * .2, R * .08, -1, 4); ctx.stroke();
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy + R * .15, R * .5, R * .3, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(cx + R * .35, cy - R * .05); ctx.lineTo(cx + R * .8, cy + R * .1); ctx.lineTo(cx + R * .4, cy + R * .35); ctx.fill();
+    ctx.lineWidth = R * .06; [-.25, .25].forEach(x => { ctx.beginPath(); ctx.moveTo(cx + x * R, cy + R * .35); ctx.lineTo(cx + x * R, cy + R * .48); ctx.stroke(); });
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx + R * .5, cy + R * .05, R * .1, 0, 7); ctx.fill();
+    ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.arc(cx + R * .5 + Math.sin(t / 7) * R * .04, cy + R * .05, R * .05, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = `bold ${R * .14}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText(['ガス', '蒸気', 'ミスト', '粉じん', 'ヒューム'][Math.floor(t / 30) % 5], cx, cy - R * .4);
+  },
+  // カガク・ヒドラ：首ごとに色のちがう、多頭の大蛇
+  kagakuhidora(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#2a4a3a'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .6, R * .7, R * .3, 0, 0, 7); ctx.fill();
+    const cols = ['#a0e060', '#a8acb8', '#f0f0f0', '#e080e0', '#60c0e0'];
+    cols.forEach((c, i) => {
+      const bx = cx + (i - 2) * R * .22, hx = cx + (i - 2) * R * .38 + Math.sin(t / 9 + i) * R * .05, hy = cy - R * (.35 + (i % 2) * .25 + (i === 2 ? .2 : 0));
+      ctx.strokeStyle = '#2a4a3a'; ctx.lineWidth = R * .14; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(bx, cy + R * .5); ctx.quadraticCurveTo(bx, cy, hx, hy); ctx.stroke();
+      ctx.fillStyle = '#3a6a4a'; ctx.beginPath(); ctx.ellipse(hx, hy, R * .13, R * .1, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#ffe040'; ctx.beginPath(); ctx.arc(hx + R * .04, hy - R * .02, R * .025, 0, 7); ctx.fill();
+      ctx.save(); ctx.globalAlpha = .6; glow(ctx, hx, hy - R * .18 - ((t / 20 + i * .2) % 1) * R * .15, R * .1, c, 'rgba(0,0,0,0)'); ctx.restore();
+    });
+  },
+});

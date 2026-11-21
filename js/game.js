@@ -287,10 +287,13 @@ class Game {
   }
   updateMenuBtn() { $('#btnM').classList.toggle('locked', !(this.state && this.state.flags.menu)); }
   async joinAt(mapId) { // 町の「役場」で仲間が加わる（world.story.joins）
-    const J = this.story && this.story.joins[mapId]; if (!J || this.state.flags['join_' + J.member]) return;
+    const J = this.story && this.story.joins[mapId], key = J && (J.key || J.member); if (!J || this.state.flags['join_' + key]) return;
     await say(this.lines(J.lines));
-    const s = this.state; s.flags['join_' + J.member] = true; s.flags.hoan = true; // hoan＝最初の案内役が加わった
+    const s = this.state; s.flags['join_' + key] = true; s.flags['join_' + J.member] = true; s.flags.hoan = true; // hoan＝最初の案内役が加わった
     if (!s.members[J.member]) s.members[J.member] = JSON.parse(JSON.stringify(this.world.base[J.member]));
+    const m = s.members[J.member], want = J.catchUp ? s.members.hero.lv - J.catchUp : 0; // 再加入の仲間は、主人公に近いレベルまで追いつく
+    while (m.lv < want) { m.lv++; m.mhp += 4; m.mmp += 2; m.atk += 1; m.def += 1; }
+    if (J.catchUp) { m.hp = m.mhp; m.mp = m.mmp; }
     s.party = J.party.slice(); this.field.setParty ? this.field.setParty(s.party.slice(0, 2)) : (this.field.party = s.party.slice(0, 2));
   }
   async hoanJoin() {
@@ -418,6 +421,22 @@ class Game {
     this.field.load('village', 3, 6); this.state.map = 'village'; this.state.lastInn = { map: 'village', x: 3, y: 11 };
     this.save();
     await say(['（エンディングのあとも、冒険は続けられます。いまの冒険を役場の届出と同じように記録しました）', ['ショウボウ老師', `${n}、よく戻った。火の国へ行く気になったら、いつでも消防署に来るのじゃ。`]]);
+  }
+  // 物語の分かれ道（データで決める）：続きへ進むか、ここでエンディングを見るか
+  async storyChoice(C) {
+    let v = null; while (!v) v = await choose(C.title, [{ label: C.go, value: 'go' }, { label: C.end, value: 'end' }]);
+    if (v === 'go') { await say(this.lines(C.goLines || [])); return; }
+    await this.storyRoll(C.roll);
+    this.state.flags['ending_' + (C.key || 'main')] = true; this.state.flags.endingSeen = true;
+    const W = C.back || this.world.start; this.field.load(W.map, W.x, W.y); this.state.map = W.map; this.state.lastInn = { map: W.map, x: W.x, y: W.y };
+    this.save();
+    await say(this.lines(C.after || []));
+  }
+  async storyRoll(L) {
+    Sound.bgm('ending');
+    const s = this.state, hero = s.members.hero, st = Learn.stats();
+    const f = t => String(t).replace(/\{lv\}/g, hero.lv).replace(/\{learned\}/g, st.learned).replace(/\{mastered\}/g, st.mastered).replace(/\{answers\}/g, st.answers).replace(/\{rate\}/g, st.rate).replace(/\{time\}/g, fmtMin(Learn.d.time.total));
+    await say(this.lines(L.map(l => Array.isArray(l) ? [l[0], f(l[1])] : f(l))));
   }
   // エンディング（スタッフロール風）。見たあとも遊び続けられる
   async endingRoll() {
@@ -793,7 +812,7 @@ class Game {
     if (S.clue) { const c = (s.clues = s.clues || {})[id.split('-')[0]] = (s.clues[id.split('-')[0]] || []); if (!c.includes(S.clue.name)) { c.push(S.clue.name); await say([`手がかり「${S.clue.name}」を手に入れた！`, [G, hl(S.clue.text)]]); } }
     if (S.boss && M && M.after) { s.flags['solved_' + town0] = true; await say(M.after.map(l => Array.isArray(l) ? [l[0], hl(l[1])] : l)); }
     if (S.boss && id[0] === 'R') return this.fireClear(id);
-    if (S.boss && this.story) { const B = this.story.bossAfter[id]; if (B) { await say(this.lines(B.lines)); (B.flags || []).forEach(f => s.flags[f] = true); if (B.party) { s.party = B.party.slice(); this.field.setParty ? this.field.setParty(s.party.slice(0, 2)) : (this.field.party = s.party.slice(0, 2)); } if (B.clearReport) await this.clearReport(); if (B.cleared) s.flags.cleared = true; } Sound.bgm(this.mapBgm()); return; }
+    if (S.boss && this.story) { const B = this.story.bossAfter[id]; if (B) { await say(this.lines(B.lines)); (B.flags || []).forEach(f => s.flags[f] = true); if (B.party) { s.party = B.party.slice(); this.field.setParty ? this.field.setParty(s.party.slice(0, 2)) : (this.field.party = s.party.slice(0, 2)); } if (B.clearReport) await this.clearReport(); if (B.cleared) s.flags.cleared = true; if (B.choice) await this.storyChoice(B.choice); } Sound.bgm(this.mapBgm()); return; }
     if (S.boss) { await ({ 'L1-boss': () => this.ending(), 'L2-boss': () => this.ending2(), 'L3-boss': () => this.ending3(), 'D1-boss': () => this.ending4(), 'D2-boss': () => this.ending5(), 'D3-boss': () => this.ending6(), 'P1-boss': () => this.ending7(), 'P2-boss': () => this.ending8(), 'P3-boss': () => this.ending9(), 'P4-boss': () => this.ending10(), 'H1-boss': () => this.ending11(), 'H2-boss': () => this.ending12(), 'H3-boss': () => this.ending13(), 'H4-boss': () => this.ending14(), 'H5-boss': () => this.ending15(), 'H6-boss': () => this.ending16(), 'H7-boss': () => this.ending17(), 'H8-boss': () => this.ending18(), 'F-boss': () => this.finalBoss() })[id](); Sound.bgm(this.mapBgm()); return; } // しんみりした曲などのあとは、その場所の曲にもどす
     // ホアンの確認：そのステージの五肢択一から2問（未出題を優先）
     const done = new Set(Learn.d.answers.map(a => a.qid));

@@ -334,6 +334,43 @@
    ]
   },
   {
+   "id": "Y-01",
+   "subject": "労働衛生（有害）",
+   "area": "化学物質",
+   "item": "有機溶剤の性質と健康障害",
+   "kid_prefixes": [
+    "Y1-YUUKI"
+   ]
+  },
+  {
+   "id": "Y-02",
+   "subject": "労働衛生（有害）",
+   "area": "化学物質",
+   "item": "金属による健康障害",
+   "kid_prefixes": [
+    "Y1-KINZOKU"
+   ]
+  },
+  {
+   "id": "Y-03",
+   "subject": "労働衛生（有害）",
+   "area": "化学物質",
+   "item": "有害なガス",
+   "kid_prefixes": [
+    "Y1-GAS"
+   ]
+  },
+  {
+   "id": "Y-04",
+   "subject": "労働衛生（有害）",
+   "area": "化学物質",
+   "item": "化学物質の状態と職業がん",
+   "kid_prefixes": [
+    "Y1-JOUTAI",
+    "Y1-GAN"
+   ]
+  },
+  {
    "id": "E-13",
    "subject": "労働衛生",
    "area": "健康管理",

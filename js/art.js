@@ -2357,3 +2357,53 @@ Object.assign(ENEMY_HQ, {
     ctx.strokeStyle = '#d0d4dc'; ctx.lineWidth = R * .05; ctx.beginPath(); ctx.moveTo(cx + R * .45, cy + R * .3); ctx.lineTo(cx + R * .85, cy - R * .6 + Math.sin(t / 6) * R * .05); ctx.stroke();
   },
 });
+
+// ===== 衛生管理者RPGの魔物（ソクの砦） =====
+Object.assign(ENEMY_HQ, {
+  // ペンキヌリ・ゴースト：ペンキまみれの幽霊。赤・黄・青のしずく
+  penkiya(ctx, cx, cy, R, t) {
+    const g = ctx.createLinearGradient(0, cy - R * .7, 0, cy + R * .7); g.addColorStop(0, '#f4f4f8'); g.addColorStop(1, 'rgba(220,220,230,.2)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx - R * .45, cy + R * .6); ctx.quadraticCurveTo(cx - R * .55, cy - R * .7, cx, cy - R * .7); ctx.quadraticCurveTo(cx + R * .55, cy - R * .7, cx + R * .45, cy + R * .6);
+    for (let i = 0; i < 4; i++) ctx.quadraticCurveTo(cx + R * (.34 - i * .23), cy + R * (.4 + (i % 2) * .3), cx + R * (.22 - i * .23), cy + R * .6); ctx.fill();
+    ['#e03030', '#e8c020', '#3060d0'].forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(cx + R * (-.25 + i * .25), cy - R * (.45 - i * .1), R * .12, R * .08, i, 0, 7); ctx.fill(); const ph = (t / 15 + i / 3) % 1; ctx.beginPath(); ctx.arc(cx + R * (-.25 + i * .25), cy - R * (.35 - i * .1) + ph * R * .8, R * .035, 0, 7); ctx.fill(); });
+    eyes(ctx, cx, cy - R * .2, R * .14, R * .07);
+    ctx.save(); ctx.translate(cx + R * .55, cy); ctx.rotate(.5 + Math.sin(t / 6) * .3); ctx.fillStyle = '#8a5a2a'; ctx.fillRect(-R * .03, -R * .3, R * .06, R * .3); ctx.fillStyle = '#e03030'; ctx.fillRect(-R * .06, -R * .42, R * .12, R * .14); ctx.restore();
+  },
+  // トッカ・スコーピオン：毒のしっぽを持つ黒いさそり
+  tokkasasori(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#2a1a2a'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .35, R * .35, R * .2, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#2a1a2a'; ctx.lineWidth = R * .05; for (let i = 0; i < 4; i++) [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .2, cy + R * (.3 + i * .06)); ctx.lineTo(cx + s * R * .5, cy + R * (.4 + i * .08)); ctx.lineTo(cx + s * R * .55, cy + R * (.6 + i * .05)); ctx.stroke(); });
+    ctx.lineWidth = R * .1; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx, cy + R * .2); const sw = Math.sin(t / 8) * R * .05; ctx.bezierCurveTo(cx + R * .1, cy - R * .3, cx - R * .2, cy - R * .7, cx + R * .15 + sw, cy - R * .65); ctx.stroke();
+    ctx.fillStyle = '#c040ff'; ctx.beginPath(); ctx.moveTo(cx + R * .15 + sw, cy - R * .7); ctx.lineTo(cx + R * .35 + sw, cy - R * .55); ctx.lineTo(cx + R * .18 + sw, cy - R * .55); ctx.fill();
+    [-1, 1].forEach(s => { ctx.strokeStyle = '#2a1a2a'; ctx.lineWidth = R * .07; ctx.beginPath(); ctx.moveTo(cx + s * R * .25, cy + R * .25); ctx.lineTo(cx + s * R * .55, cy); ctx.stroke(); ctx.fillStyle = '#3a2a3a'; ctx.beginPath(); ctx.ellipse(cx + s * R * .62, cy - R * .08, R * .13, R * .08, s * .5, 0, 7); ctx.fill(); });
+    ctx.fillStyle = '#ff4060'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * R * .08, cy + R * .25, R * .03, 0, 7); ctx.fill(); });
+    ctx.fillStyle = 'rgba(200,80,255,.7)'; const ph = (t / 12) % 1; ctx.beginPath(); ctx.arc(cx + R * .3 + sw, cy - R * .5 + ph * R * .3, R * .025, 0, 7); ctx.fill();
+  },
+  // アナグラ・トロル：穴ぐらにすむ灰色の大きなトロル。こん棒
+  anagura(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#7a7a6a'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .25, R * .5, R * .55, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx, cy - R * .45, R * .3, R * .25, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5a5a4a'; ctx.beginPath(); ctx.ellipse(cx, cy - R * .38, R * .12, R * .08, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffd040'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * R * .12, cy - R * .52, R * .04, 0, 7); ctx.fill(); });
+    ctx.fillStyle = '#f0f0e0'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .08, cy - R * .3); ctx.lineTo(cx + s * R * .1, cy - R * .2); ctx.lineTo(cx + s * R * .13, cy - R * .3); ctx.fill(); });
+    const sw = Math.sin(t / 7) * .4; ctx.save(); ctx.translate(cx + R * .5, cy + R * .1); ctx.rotate(.45 + sw * .5); ctx.fillStyle = '#6a4a2a'; ctx.beginPath(); ctx.moveTo(-R * .04, 0); ctx.lineTo(R * .04, 0); ctx.lineTo(R * .1, -R * .6); ctx.lineTo(-R * .1, -R * .6); ctx.fill(); ctx.restore();
+    ctx.fillStyle = 'rgba(160,150,120,.6)'; for (let i = 0; i < 8; i++) { const ph = (t / 30 + i / 8) % 1; ctx.beginPath(); ctx.arc(cx + Math.sin(i * 2.5) * R * .8, cy + R * .8 - ph * R * .4, R * .03 * (1 - ph), 0, 7); ctx.fill(); }
+  },
+  // ヒバク・ウィスプ：ふわふわ光る緑の火の玉。放射線マーク
+  hibaku(ctx, cx, cy, R, t) {
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 3; i++) glow(ctx, cx + Math.sin(t / 10 + i * 2) * R * .1, cy + Math.cos(t / 12 + i) * R * .1, R * (.55 - i * .1), 'rgba(160,255,120,.6)', 'rgba(60,200,60,0)'); ctx.restore();
+    ctx.fillStyle = 'rgba(220,255,200,.9)'; ctx.beginPath(); ctx.moveTo(cx - R * .3, cy + R * .1); ctx.quadraticCurveTo(cx - R * .2, cy - R * .6, cx + Math.sin(t / 5) * R * .1, cy - R * .75); ctx.quadraticCurveTo(cx + R * .2, cy - R * .5, cx + R * .3, cy + R * .1); ctx.arc(cx, cy + R * .1, R * .3, 0, Math.PI); ctx.fill();
+    eyes(ctx, cx, cy, R * .11, R * .05);
+    ctx.fillStyle = '#2a2a10'; ctx.beginPath(); for (let i = 0; i < 3; i++) { const a = i / 3 * 6.28 - 1.57; ctx.moveTo(cx, cy + R * .22); ctx.arc(cx, cy + R * .22, R * .1, a - .5, a + .5); } ctx.fill();
+  },
+  // ソクヤブリ・キメラ：ライオン・ヤギ・ヘビ・さそりの4つの頭をもつ合成獣
+  kimera(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#b08040'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .3, R * .6, R * .35, 0, 0, 7); ctx.fill();
+    [-.45, -.15, .15, .4].forEach(x => { ctx.fillRect(cx + x * R, cy + R * .5, R * .13, R * .38); });
+    ctx.fillStyle = '#c89040'; ctx.beginPath(); ctx.arc(cx + R * .55, cy - R * .05, R * .28, 0, 7); ctx.fill(); ctx.fillStyle = '#e0b060'; ctx.beginPath(); ctx.arc(cx + R * .6, cy - R * .02, R * .17, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ff3020'; ctx.beginPath(); ctx.arc(cx + R * .66, cy - R * .08, R * .03, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8e0d0'; ctx.beginPath(); ctx.ellipse(cx + R * .1, cy - R * .25, R * .14, R * .12, 0, 0, 7); ctx.fill(); ctx.strokeStyle = '#6a5a40'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.arc(cx + R * .02, cy - R * .38, R * .1, 3.5, 5.5); ctx.stroke();
+    ctx.strokeStyle = '#3a8a3a'; ctx.lineWidth = R * .08; ctx.lineCap = 'round'; const sw = Math.sin(t / 7) * R * .08; ctx.beginPath(); ctx.moveTo(cx - R * .55, cy + R * .2); ctx.quadraticCurveTo(cx - R * .85, cy - R * .1, cx - R * .65 + sw, cy - R * .45); ctx.stroke(); ctx.fillStyle = '#3a8a3a'; ctx.beginPath(); ctx.ellipse(cx - R * .62 + sw, cy - R * .5, R * .08, R * .06, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#2a1a2a'; ctx.lineWidth = R * .06; ctx.beginPath(); ctx.moveTo(cx - R * .3, cy + R * .05); ctx.quadraticCurveTo(cx - R * .35, cy - R * .5, cx - R * .15 - sw, cy - R * .6); ctx.stroke(); ctx.fillStyle = '#c040ff'; ctx.beginPath(); ctx.moveTo(cx - R * .15 - sw, cy - R * .65); ctx.lineTo(cx - R * .02 - sw, cy - R * .55); ctx.lineTo(cx - R * .17 - sw, cy - R * .55); ctx.fill();
+  },
+});

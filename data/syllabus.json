@@ -334,6 +334,44 @@
    ]
   },
   {
+   "id": "Z-05",
+   "subject": "関係法令（有害）",
+   "area": "規則",
+   "item": "有機溶剤中毒予防規則",
+   "kid_prefixes": [
+    "Z2-YUUKI"
+   ]
+  },
+  {
+   "id": "Z-06",
+   "subject": "関係法令（有害）",
+   "area": "規則",
+   "item": "特定化学物質障害予防規則・石綿障害予防規則",
+   "kid_prefixes": [
+    "Z2-TOKKA",
+    "Z2-SEKIMEN"
+   ]
+  },
+  {
+   "id": "Z-07",
+   "subject": "関係法令（有害）",
+   "area": "規則",
+   "item": "酸素欠乏症等防止規則・粉じん障害防止規則",
+   "kid_prefixes": [
+    "Z2-SANKETSU",
+    "Z2-FUNJIN"
+   ]
+  },
+  {
+   "id": "Z-08",
+   "subject": "関係法令（有害）",
+   "area": "規則",
+   "item": "電離放射線障害防止規則",
+   "kid_prefixes": [
+    "Z2-DENRI"
+   ]
+  },
+  {
    "id": "Z-01",
    "subject": "関係法令（有害）",
    "area": "規制のしくみ",

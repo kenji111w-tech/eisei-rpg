@@ -174,7 +174,13 @@ town('tZ1', 'town7', 'Z1', 'キセイの砦', 'yume17', 'yume18', office='砦の
     dict(x=12, y=10, look='villager2', talk=['このびん、ラベルがはがれてて、中身がわからないんだ。', 'SDS？ なんだい、それは。']),
     dict(x=6, y=13, look='child', talk=['夜になると、よろいの将軍が天守に上っていくんだよ！']),
 ])
-field('yume18', 'field3', '働く人の国 砦の堀', 'tZ1', (16, 7), 'tZ2', ['fuzai', 'mukyouiku', 'yamiseizou', 'nolabel'], '← キセイの砦', 'ソクの砦（準備中）')
+field('yume18', 'field3', '働く人の国 砦の堀', 'tZ1', (16, 7), 'tZ2', ['fuzai', 'mukyouiku', 'yamiseizou', 'nolabel'], '← キセイの砦', 'ソクの砦')
+town('tZ2', 'town8', 'Z2', 'ソクの砦', 'yume18', 'yume19', office='砦の詰所', back_label='堀ぞいに、キセイの砦へ', fwd_label='ケンコウの砦へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['塗装場の換気扇が止まってて、頭がくらくらするんだ。', '有機溶剤の掲示も、だれかにはがされてた。'], aiko='Z2'),
+    dict(x=12, y=10, look='villager2', talk=['穴ぐらの作業、測定もしないで入らされるんだ。', '見張りもいないし、こわくてしかたない。']),
+    dict(x=6, y=13, look='child', talk=['中庭に、首が4つあるおっきな獣がいるよ！ 本をむしゃむしゃ食べてた！']),
+])
+field('yume19', 'field2', '働く人の国 城壁の道', 'tZ2', (16, 8), 'tZ3', ['penkiya', 'tokkasasori', 'anagura', 'hibaku'], '← ソクの砦', 'ケンコウの砦（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

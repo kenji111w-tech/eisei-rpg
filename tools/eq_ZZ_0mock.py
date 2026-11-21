@@ -5,3 +5,5 @@ def mk(set_, sj, n, kid, question, ch, ans, expl, ce, src, ref=None):
     q(f'M{set_}-{sj}{n:02d}', kid, 'mock', 0, 'mcq5', question, ch, ans, expl, ce, src=src, pool='mock', town=MOCK_TOWN[sj])
     Q[-1]['mock_set'] = set_
     if ref: Q[-1]['legal_reference'] = ref
+SRC['SEKIMEN'] = ('石綿障害予防規則（e-Gov法令検索）', 'https://laws.e-gov.go.jp/law/417M60000100021', '石綿障害予防規則')
+SRC['FUNJIN'] = ('粉じん障害防止規則（e-Gov法令検索）', 'https://laws.e-gov.go.jp/law/354M50002000018', '粉じん障害防止規則')

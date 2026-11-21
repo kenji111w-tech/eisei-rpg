@@ -334,6 +334,42 @@
    ]
   },
   {
+   "id": "Z-09",
+   "subject": "関係法令（有害）",
+   "area": "健康管理",
+   "item": "特殊健康診断の時期・報告・記録の保存",
+   "kid_prefixes": [
+    "Z3-TOKKEN"
+   ]
+  },
+  {
+   "id": "Z-10",
+   "subject": "関係法令（有害）",
+   "area": "作業環境管理",
+   "item": "作業環境測定の頻度と記録の保存",
+   "kid_prefixes": [
+    "Z3-SOKUTEI"
+   ]
+  },
+  {
+   "id": "Z-11",
+   "subject": "関係法令（有害）",
+   "area": "健康管理",
+   "item": "じん肺法",
+   "kid_prefixes": [
+    "Z3-JINPAI"
+   ]
+  },
+  {
+   "id": "Z-12",
+   "subject": "関係法令（有害）",
+   "area": "労働基準法",
+   "item": "有害業務の時間外労働・年少者・女性の就業制限",
+   "kid_prefixes": [
+    "Z3-ROUKI"
+   ]
+  },
+  {
    "id": "Z-05",
    "subject": "関係法令（有害）",
    "area": "規則",

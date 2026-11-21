@@ -180,7 +180,12 @@ town('tZ2', 'town8', 'Z2', 'ソクの砦', 'yume18', 'yume19', office='砦の詰
     dict(x=12, y=10, look='villager2', talk=['穴ぐらの作業、測定もしないで入らされるんだ。', '見張りもいないし、こわくてしかたない。']),
     dict(x=6, y=13, look='child', talk=['中庭に、首が4つあるおっきな獣がいるよ！ 本をむしゃむしゃ食べてた！']),
 ])
-field('yume19', 'field2', '働く人の国 城壁の道', 'tZ2', (16, 8), 'tZ3', ['penkiya', 'tokkasasori', 'anagura', 'hibaku'], '← ソクの砦', 'ケンコウの砦（準備中）')
+field('yume19', 'field2', '働く人の国 城壁の道', 'tZ2', (16, 8), 'tZ3', ['penkiya', 'tokkasasori', 'anagura', 'hibaku'], '← ソクの砦', 'ケンコウの砦')
+town('tZ3', 'town9', 'Z3', 'ケンコウの砦', 'yume19', None, office='砦の詰所', back_label='城壁ぞいに、ソクの砦へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['特殊健康診断の報告書が、どこかに消えちまったんだ。', '測定器も、何年も動いてない。'], aiko='Z3'),
+    dict(x=12, y=10, look='villager2', talk=['坑道の仕事で、毎日4時間も5時間も残業だ。', '体じゅうが粉まみれで、息が苦しい……。']),
+    dict(x=6, y=13, look='child', talk=['砦のいちばん上に、黒いスーツの社長がいるんだって！ 夜中もずっと明かりがついてるよ！']),
+])
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

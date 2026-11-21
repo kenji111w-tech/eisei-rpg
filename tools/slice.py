@@ -64,7 +64,7 @@ async def main():
                     await run(1500, "window.__dd===true")
                 await pg.evaluate(f"() => {{ const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.stage('{T}-boss').then(()=>{{window.__dd=true; g.field.busy=false;}}); }}")
                 await run(40); await pg.screenshot(path=f'/tmp/e_boss_{T}.png')
-                ok = await run(2500, "window.__dd===true"); print(T, 'boss', ok, await pg.evaluate("JSON.stringify(Object.keys(window.__game.state.cleared).length)"), await pg.evaluate("JSON.stringify(window.__game.state.party)"))
+                ok = await run(2500, "window.__dd===true"); print(T, 'boss', ok, await pg.evaluate("JSON.stringify([window.__game.state.map, !!window.__game.state.flags.cleared, !!window.__game.state.flags.endingSeen])"), await pg.evaluate("JSON.stringify(Object.keys(window.__game.state.cleared).length)"), await pg.evaluate("JSON.stringify(window.__game.state.party)"))
             print('noq', await pg.evaluate('window.__noq||[]')); print('\n'.join(errs) or 'no errors'); await b.close(); return
         # 草原→町
         await pg.evaluate("() => { const g=window.__game; g.field.busy=true; g.onEvent({type:'exit',to:'yume1',tx:9,ty:16}).then(()=>{window.__d2=true; g.field.busy=false;}); }")
@@ -108,7 +108,7 @@ async def main():
                 await run(1500, "window.__dd===true")
             await pg.evaluate(f"() => {{ const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.stage('{T}-boss').then(()=>{{window.__dd=true; g.field.busy=false;}}); }}")
             await run(40); await pg.screenshot(path=f'/tmp/e_boss_{T}.png')
-            ok = await run(2500, "window.__dd===true"); print(T, 'boss', ok, await pg.evaluate("JSON.stringify(window.__game.state.cleared)"))
+            ok = await run(2500, "window.__dd===true"); print(T, 'boss', ok, await pg.evaluate("JSON.stringify([window.__game.state.map, !!window.__game.state.flags.cleared, !!window.__game.state.flags.endingSeen])"), await pg.evaluate("JSON.stringify(window.__game.state.cleared)"))
         print('steps', cnt, await pg.evaluate("document.getElementById('ui').innerText.slice(0,200)"))
         print('noq', await pg.evaluate('window.__noq||[]'))
         print('\n'.join(errs) or 'no errors')

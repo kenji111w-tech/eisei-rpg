@@ -1958,3 +1958,61 @@ Object.assign(ENEMY_HQ, {
     ctx.save(); ctx.globalAlpha = .5; glow(ctx, cx + R * .3, cy - R * .6, R * .5, 'rgba(180,140,255,.6)', 'rgba(180,140,255,0)'); ctx.restore();
   },
 });
+
+// ===== 衛生管理者RPGの魔物（ゲンキの森の里） =====
+Object.assign(ENEMY_HQ, {
+  // ウツウツ・クラウド：しょんぼり顔の灰色の雨雲。雨つぶを落とす
+  utsuutsu(ctx, cx, cy, R, t) {
+    ctx.strokeStyle = 'rgba(120,160,220,.8)'; ctx.lineWidth = R * .03;
+    for (let i = 0; i < 9; i++) { const x = cx - R * .6 + i * R * .15, ph = (t / 12 + i * .37) % 1; ctx.beginPath(); ctx.moveTo(x, cy + R * .2 + ph * R * .7); ctx.lineTo(x - R * .03, cy + R * .3 + ph * R * .7); ctx.stroke(); }
+    [[-.4, -.05, .35], [0, -.25, .45], [.4, -.05, .35], [-.15, .1, .35], [.2, .1, .35]].forEach(([x, y, r]) => glow(ctx, cx + x * R, cy + y * R, r * R, '#9aa0b0', '#5a6070'));
+    eyes(ctx, cx, cy - R * .05, R * .18, R * .07);
+    ctx.strokeStyle = '#2a3040'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(cx - R * .12, cy + R * .18); ctx.quadraticCurveTo(cx, cy + R * .1, cx + R * .12, cy + R * .18); ctx.stroke();
+    [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .28, cy - R * .2); ctx.lineTo(cx + s * R * .1, cy - R * .14); ctx.stroke(); });
+  },
+  // ゴロネ・ナマケモノ：枝にぶらさがって寝ころぶ茶色のナマケモノ
+  gorone(ctx, cx, cy, R, t) {
+    ctx.strokeStyle = '#6a4a20'; ctx.lineWidth = R * .1; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx - R, cy - R * .6); ctx.lineTo(cx + R, cy - R * .55); ctx.stroke();
+    const sw = Math.sin(t / 20) * .08; ctx.save(); ctx.translate(cx, cy - R * .58); ctx.rotate(sw);
+    ctx.strokeStyle = '#8a6a40'; ctx.lineWidth = R * .1; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(s * R * .35, R * .45); ctx.lineTo(s * R * .4, 0); ctx.stroke(); });
+    const g = ctx.createRadialGradient(-R * .1, R * .5, R * .1, 0, R * .6, R * .55); g.addColorStop(0, '#c8a878'); g.addColorStop(1, '#7a5a30');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, R * .7, R * .5, R * .4, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8d8b8'; ctx.beginPath(); ctx.ellipse(0, R * .62, R * .28, R * .2, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = R * .03; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(s * R * .1, R * .6, R * .05, .2, Math.PI - .2); ctx.stroke(); });
+    ctx.fillStyle = '#3a2a10'; ctx.beginPath(); ctx.ellipse(0, R * .72, R * .05, R * .03, 0, 0, 7); ctx.fill(); ctx.restore();
+    ctx.fillStyle = '#fff'; ctx.font = `bold ${R * .18}px sans-serif`; ctx.textAlign = 'center'; ctx.globalAlpha = .5 + .5 * Math.sin(t / 8); ctx.fillText('Zzz', cx + R * .6, cy - R * .2 - (t / 3 % 20) * R * .01); ctx.globalAlpha = 1;
+  },
+  // ケムリ・モクモク：灰色の煙のかたまり。手にたばこ
+  kemuri(ctx, cx, cy, R, t) {
+    for (let i = 0; i < 12; i++) { const a = i / 12 * 6.28 + t / 50, r = R * (.4 + .08 * Math.sin(t / 7 + i)); glow(ctx, cx + Math.cos(a) * r, cy + Math.sin(a) * r * .8, R * .3, 'rgba(200,200,200,.85)', 'rgba(140,140,140,0)'); }
+    glow(ctx, cx, cy, R * .5, 'rgba(210,210,210,1)', 'rgba(160,160,160,.4)');
+    eyes(ctx, cx, cy - R * .08, R * .18, R * .08);
+    ctx.strokeStyle = '#3a3a3a'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.arc(cx, cy + R * .1, R * .1, .2, Math.PI - .2); ctx.stroke();
+    ctx.save(); ctx.translate(cx + R * .55, cy + R * .25); ctx.rotate(-.3); ctx.fillStyle = '#f4f0e8'; ctx.fillRect(-R * .2, -R * .035, R * .3, R * .07); ctx.fillStyle = '#d08a40'; ctx.fillRect(-R * .25, -R * .035, R * .07, R * .07); ctx.fillStyle = '#ff6020'; ctx.fillRect(R * .1, -R * .035, R * .04, R * .07); ctx.restore();
+    ctx.save(); ctx.globalAlpha = .6; for (let i = 0; i < 4; i++) { const ph = (t / 25 + i / 4) % 1; glow(ctx, cx + R * (.7 + Math.sin(ph * 6) * .08), cy + R * (.15 - ph * .9), R * (.06 + ph * .12), 'rgba(220,220,220,.9)', 'rgba(220,220,220,0)'); } ctx.restore();
+  },
+  // ゴマカシ・グラフ：棒グラフの体に、のびちぢみする棒。ずるい目
+  gomakashi(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#f4f0e0'; rr(ctx, cx - R * .7, cy - R * .6, R * 1.4, R * 1.2, R * .08); ctx.fill();
+    ctx.strokeStyle = '#3a3a3a'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(cx - R * .55, cy - R * .45); ctx.lineTo(cx - R * .55, cy + R * .45); ctx.lineTo(cx + R * .6, cy + R * .45); ctx.stroke();
+    const cols = ['#e05a4a', '#4a8ae0', '#e0b040', '#5ab05a'];
+    cols.forEach((c, i) => { const h = R * (.25 + .35 * (.5 + .5 * Math.sin(t / 6 + i * 1.7))); ctx.fillStyle = c; ctx.fillRect(cx - R * .45 + i * R * .26, cy + R * .45 - h, R * .18, h); });
+    eyes(ctx, cx, cy - R * .78, R * .18, R * .08);
+    ctx.strokeStyle = '#2a2a2a'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(cx - R * .15, cy - R * .64); ctx.quadraticCurveTo(cx + R * .05, cy - R * .56, cx + R * .2, cy - R * .68); ctx.stroke();
+    ctx.fillStyle = '#c03030'; ctx.font = `bold ${R * .2}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('?%', cx + R * .45, cy - R * .3);
+  },
+  // ゲンキドロボウ：黒いずきんをかぶり、光る袋をかついだ盗っ人
+  genkidoro(ctx, cx, cy, R, t) {
+    ctx.save(); ctx.translate(cx + R * .45, cy - R * .15 + Math.sin(t / 8) * R * .03);
+    glow(ctx, 0, 0, R * .5, 'rgba(255,240,150,.7)', 'rgba(255,200,60,0)');
+    ctx.fillStyle = '#c8a060'; ctx.beginPath(); ctx.ellipse(0, 0, R * .32, R * .3, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#7a5a20'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(-R * .1, -R * .28); ctx.lineTo(R * .1, -R * .28); ctx.stroke();
+    ctx.fillStyle = '#7a4a10'; ctx.font = `bold ${R * .14}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('げんき', 0, R * .05); ctx.restore();
+    const cl = lin(ctx, cx - R, 0, cx + R, 0, ['#3a3a4a', '#1a1a2a', '#0a0a14']);
+    ctx.fillStyle = cl; ctx.beginPath(); ctx.moveTo(cx - R * .5, cy + R * .9); ctx.lineTo(cx - R * .35, cy - R * .2); ctx.quadraticCurveTo(cx - R * .1, cy - R * .35, cx + R * .15, cy - R * .2); ctx.lineTo(cx + R * .3, cy + R * .9); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(cx - R * .4, cy - R * .25); ctx.quadraticCurveTo(cx - R * .15, cy - R * 1.05, cx + R * .15, cy - R * .25); ctx.fill();
+    ctx.fillStyle = '#0a0a10'; ctx.beginPath(); ctx.ellipse(cx - R * .12, cy - R * .45, R * .2, R * .17, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffe040'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.ellipse(cx - R * .12 + s * R * .08, cy - R * .47, R * .045, R * .025, 0, 0, 7); ctx.fill(); });
+    ctx.strokeStyle = '#1a1a2a'; ctx.lineWidth = R * .1; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx + R * .05, cy - R * .05); ctx.lineTo(cx + R * .3, cy - R * .3); ctx.stroke();
+  },
+});

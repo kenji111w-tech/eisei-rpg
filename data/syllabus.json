@@ -334,6 +334,42 @@
    ]
   },
   {
+   "id": "E-09",
+   "subject": "労働衛生",
+   "area": "健康管理",
+   "item": "メンタルヘルス（4つのケア・3つの予防）",
+   "kid_prefixes": [
+    "E3-MH"
+   ]
+  },
+  {
+   "id": "E-10",
+   "subject": "労働衛生",
+   "area": "健康管理",
+   "item": "健康の保持増進（THP）",
+   "kid_prefixes": [
+    "E3-THP"
+   ]
+  },
+  {
+   "id": "E-11",
+   "subject": "労働衛生",
+   "area": "作業環境",
+   "item": "受動喫煙の防止",
+   "kid_prefixes": [
+    "E3-KITSUEN"
+   ]
+  },
+  {
+   "id": "E-12",
+   "subject": "労働衛生",
+   "area": "労働衛生管理",
+   "item": "労働衛生の統計",
+   "kid_prefixes": [
+    "E3-TOUKEI"
+   ]
+  },
+  {
    "id": "E-05",
    "subject": "労働衛生",
    "area": "作業管理",

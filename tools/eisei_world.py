@@ -127,7 +127,13 @@ town('tE2', 'town11', 'E2', 'デスクの森の里', 'yume10', 'yume11', office=
     dict(x=12, y=10, look='villager2', talk=['重い木箱を、ひとりで持ち上げさせられて、腰を痛めたんだ。', '休む場所も、着がえる場所もない。']),
     dict(x=6, y=13, look='child', talk=['大きなヘビが、背中をまるめて森の大木にまきついてたよ！']),
 ])
-field('yume11', 'field3', '働く人の国 森の奥の道', 'tE2', (16, 7), 'tE3', ['gansei', 'katakori', 'youtsuu', 'fukai'], '← デスクの森の里', 'ゲンキの森の里（準備中）')
+field('yume11', 'field3', '働く人の国 森の奥の道', 'tE2', (16, 7), 'tE3', ['gansei', 'katakori', 'youtsuu', 'fukai'], '← デスクの森の里', 'ゲンキの森の里')
+town('tE3', 'town12', 'E3', 'ゲンキの森の里', 'yume11', 'yume12', office='森の管理小屋', bgm='town_chem', back_label='森の奥の道をぬけて、デスクの森の里へ', fwd_label='キュウキュウの森の里へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['なんだか、毎日気持ちが重くてね……。', 'だれに相談したらいいのか、わからないんだ。'], aiko='E3'),
+    dict(x=12, y=10, look='villager2', talk=['休け所が、たばこの煙でもうもうなんだ。', '吸わない人も、せきが止まらないよ。']),
+    dict(x=6, y=13, look='child', talk=['黒いずきんの人が、大きな袋をかついで、古い蔵に入っていったよ！']),
+])
+field('yume12', 'field2', '働く人の国 森の沢', 'tE3', (16, 8), 'tE4', ['utsuutsu', 'gorone', 'kemuri', 'gomakashi'], '← ゲンキの森の里', 'キュウキュウの森の里（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

@@ -1790,3 +1790,58 @@ Object.assign(ENEMY_HQ, {
     ctx.save(); ctx.globalAlpha = .55; for (let i = 0; i < 8; i++) { const ph = (t / 40 + i / 8) % 1; ctx.fillStyle = 'rgba(150,210,180,.8)'; ctx.beginPath(); ctx.arc(cx + Math.sin(i * 3 + t / 15) * R * (.5 + ph * .5), cy - R * (.2 + ph * .8), R * .03, 0, 7); ctx.fill(); } ctx.restore();
   },
 });
+
+// ===== 衛生管理者RPGの魔物（ロウキの城下町） =====
+Object.assign(ENEMY_HQ, {
+  // ヤスマセン・ゴーレム：時計を胸にうめこんだ石のゴーレム
+  yasumasen(ctx, cx, cy, R, t) {
+    const st = lin(ctx, cx - R, 0, cx + R, 0, ['#b8b0a0', '#8a8070', '#5a5448']);
+    ctx.fillStyle = st; rr(ctx, cx - R * .55, cy - R * .35, R * 1.1, R * 1.1, R * .12); ctx.fill();
+    rr(ctx, cx - R * .3, cy - R * .8, R * .6, R * .45, R * .1); ctx.fill();
+    [-1, 1].forEach(s => { rr(ctx, cx + s * R * .55 - (s > 0 ? 0 : R * .3), cy - R * .3 + Math.sin(t / 8 + s) * R * .05, R * .3, R * .75, R * .08); ctx.fill(); });
+    eyes(ctx, cx, cy - R * .58, R * .13, R * .07);
+    ctx.fillStyle = '#f0e8d0'; ctx.beginPath(); ctx.arc(cx, cy + R * .15, R * .28, 0, 7); ctx.fill(); ctx.strokeStyle = '#3a2a1a'; ctx.lineWidth = R * .03; ctx.stroke();
+    ctx.lineWidth = R * .035; ctx.beginPath(); ctx.moveTo(cx, cy + R * .15); ctx.lineTo(cx + Math.cos(t / 3) * R * .2, cy + R * .15 + Math.sin(t / 3) * R * .2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, cy + R * .15); ctx.lineTo(cx + Math.cos(t / 30) * R * .13, cy + R * .15 + Math.sin(t / 30) * R * .13); ctx.stroke();
+  },
+  // ザンギョウ・ムカデ：たくさんの足で書類を運ぶ紫のムカデ
+  zangyou(ctx, cx, cy, R, t) {
+    for (let i = 7; i >= 0; i--) { const x = cx - R * .85 + i * R * .24, y = cy + R * .35 + Math.sin(t / 6 + i * .7) * R * .1 - (i === 7 ? R * .25 : 0);
+      ctx.strokeStyle = '#3a1a4a'; ctx.lineWidth = R * .03; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + R * .05 * Math.sin(t / 3 + i), y + s * R * .22); ctx.stroke(); });
+      glow(ctx, x, y, R * (i === 7 ? .24 : .17), i % 2 ? '#b07ad0' : '#9a5ac0', '#4a1a6a'); if (i < 7 && i % 2 === 0) { ctx.fillStyle = '#fffbea'; ctx.fillRect(x - R * .08, y - R * .3, R * .16, R * .12); } }
+    const hx = cx + R * .83, hy = cy + R * .1 + Math.sin(t / 6 + 4.9) * R * .1; eyes(ctx, hx, hy - R * .05, R * .09, R * .06);
+    ctx.strokeStyle = '#3a1a4a'; ctx.lineWidth = R * .03; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(hx + s * R * .06, hy - R * .2); ctx.quadraticCurveTo(hx + s * R * .15, hy - R * .45, hx + s * R * .25, hy - R * .4); ctx.stroke(); });
+  },
+  // ユウキュウドロボウ・カラス：カレンダーの「休」をくわえたカラス
+  yuukyuu(ctx, cx, cy, R, t) {
+    const f = Math.sin(t / 5) * .3;
+    ctx.fillStyle = '#1a1a26'; [-1, 1].forEach(s => { ctx.save(); ctx.translate(cx + s * R * .2, cy); ctx.rotate(s * (-.3 + f)); ctx.beginPath(); ctx.ellipse(s * R * .38, 0, R * .42, R * .16, 0, 0, 7); ctx.fill(); ctx.restore(); });
+    const g = ctx.createRadialGradient(cx - R * .1, cy - R * .1, R * .05, cx, cy, R * .5); g.addColorStop(0, '#4a4a5a'); g.addColorStop(1, '#101018'); ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy + R * .1, R * .35, R * .45, 0, 0, 7); ctx.fill();
+    glow(ctx, cx, cy - R * .35, R * .24, '#3a3a4a', '#101018'); eyes(ctx, cx, cy - R * .38, R * .09, R * .055);
+    ctx.fillStyle = '#e8c040'; ctx.beginPath(); ctx.moveTo(cx - R * .05, cy - R * .25); ctx.lineTo(cx + R * .05, cy - R * .25); ctx.lineTo(cx + R * .25, cy - R * .18); ctx.lineTo(cx, cy - R * .15); ctx.fill();
+    ctx.save(); ctx.translate(cx + R * .32, cy - R * .12); ctx.rotate(.2); ctx.fillStyle = '#fffbea'; ctx.fillRect(-R * .12, -R * .12, R * .24, R * .26); ctx.fillStyle = '#c03030'; ctx.fillRect(-R * .12, -R * .12, R * .24, R * .06); ctx.fillStyle = '#c03030'; ctx.font = `bold ${R * .13}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('休', 0, R * .05); ctx.restore();
+  },
+  // キソクヤブリ・オニ：破れた巻物を持つ青い鬼
+  kisoku(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 12) * R * .03, sk = lin(ctx, cx - R * .7, 0, cx + R * .7, 0, ['#7aa8e0', '#4a78c0', '#2a4a8a']);
+    ctx.fillStyle = sk; ctx.beginPath(); ctx.ellipse(cx, cy + R * .35 + b, R * .58, R * .52, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8c040'; ctx.fillRect(cx - R * .5, cy + R * .5 + b, R * 1.0, R * .16); ctx.fillStyle = '#2a2a2a'; for (let i = 0; i < 5; i++) ctx.fillRect(cx - R * .45 + i * R * .2, cy + R * .5 + b, R * .07, R * .16);
+    glow(ctx, cx, cy - R * .35 + b, R * .34, '#8ab8f0', '#3a6aa8');
+    ctx.fillStyle = '#f4f0e0'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .15, cy - R * .62 + b); ctx.lineTo(cx + s * R * .22, cy - R * .92 + b); ctx.lineTo(cx + s * R * .28, cy - R * .6 + b); ctx.fill(); });
+    eyes(ctx, cx, cy - R * .38 + b, R * .13, R * .08); ctx.fillStyle = '#fff'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .1, cy - R * .2 + b); ctx.lineTo(cx + s * R * .12, cy - R * .1 + b); ctx.lineTo(cx + s * R * .15, cy - R * .2 + b); ctx.fill(); });
+    ctx.save(); ctx.translate(cx + R * .7, cy + b); ctx.rotate(.3 + Math.sin(t / 8) * .1); ctx.fillStyle = '#f0e4c0'; ctx.fillRect(-R * .15, -R * .3, R * .3, R * .25); ctx.fillRect(-R * .1, R * .0, R * .25, R * .25); ctx.fillStyle = '#8a6a3a'; ctx.fillRect(-R * .17, -R * .33, R * .34, R * .05); ctx.restore();
+  },
+  // サンロクヤブリ伯爵：マントを広げ、懐中時計を持つ伯爵
+  sanroku(ctx, cx, cy, R, t) {
+    const w = Math.sin(t / 12) * .08;
+    ctx.fillStyle = '#2a0a1a'; ctx.beginPath(); ctx.moveTo(cx, cy - R * .45); ctx.lineTo(cx - R * (1.0 + w), cy + R * .95); ctx.lineTo(cx + R * (1.0 + w), cy + R * .95); ctx.fill();
+    ctx.fillStyle = '#8a1030'; ctx.beginPath(); ctx.moveTo(cx, cy - R * .35); ctx.lineTo(cx - R * .7, cy + R * .9); ctx.lineTo(cx + R * .7, cy + R * .9); ctx.fill();
+    ctx.fillStyle = '#1a1a2a'; rr(ctx, cx - R * .3, cy - R * .3, R * .6, R * 1.15, R * .1); ctx.fill();
+    ctx.fillStyle = '#f4f4f8'; ctx.beginPath(); ctx.moveTo(cx - R * .12, cy - R * .3); ctx.lineTo(cx, cy + R * .05); ctx.lineTo(cx + R * .12, cy - R * .3); ctx.fill();
+    glow(ctx, cx, cy - R * .55, R * .27, '#f0e8f0', '#b0a0b8');
+    ctx.fillStyle = '#1a1a2a'; ctx.beginPath(); ctx.moveTo(cx - R * .28, cy - R * .62); ctx.quadraticCurveTo(cx, cy - R * .98, cx + R * .28, cy - R * .62); ctx.lineTo(cx, cy - R * .72); ctx.fill();
+    eyes(ctx, cx, cy - R * .55, R * .1, R * .06); ctx.strokeStyle = '#2a1a2a'; ctx.lineWidth = R * .02; ctx.beginPath(); ctx.moveTo(cx - R * .1, cy - R * .4); ctx.quadraticCurveTo(cx, cy - R * .36, cx + R * .1, cy - R * .4); ctx.stroke();
+    ctx.save(); ctx.translate(cx + R * .55, cy + R * .1); ctx.strokeStyle = '#e8c040'; ctx.lineWidth = R * .02; ctx.beginPath(); ctx.moveTo(-R * .25, -R * .15); ctx.lineTo(0, -R * .12); ctx.stroke(); ctx.fillStyle = '#e8c040'; ctx.beginPath(); ctx.arc(0, 0, R * .13, 0, 7); ctx.fill(); ctx.fillStyle = '#f8f4e8'; ctx.beginPath(); ctx.arc(0, 0, R * .1, 0, 7); ctx.fill(); ctx.strokeStyle = '#2a2a2a'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -R * .08); ctx.moveTo(0, 0); ctx.lineTo(R * .05, 0); ctx.stroke(); ctx.restore();
+    ctx.fillStyle = '#fff'; ctx.font = `bold ${R * .16}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('36', cx - R * .6, cy - R * .6);
+  },
+});

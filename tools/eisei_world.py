@@ -109,7 +109,13 @@ town('tK3', 'town8', 'K3', 'ジムショの城下町', 'yume7', 'yume8', office=
     dict(x=12, y=10, look='villager2', talk=['照明は切れたまま、そうじもしない。', 'トイレの前には、いつも長い行列さ。']),
     dict(x=6, y=13, look='child', talk=['地下室から、カビくさいにおいがするよ！ 何か大きいのが動いてた！']),
 ])
-field('yume8', 'field2', '働く人の国 ルールの谷', 'tK3', (16, 8), 'tK4', ['gyuugyuu', 'kuchou', 'kurayami', 'benjo'], '← ジムショの城下町', 'ロウキの城下町（準備中）')
+field('yume8', 'field2', '働く人の国 ルールの谷', 'tK3', (16, 8), 'tK4', ['gyuugyuu', 'kuchou', 'kurayami', 'benjo', 'yasumasen', 'zangyou', 'yuukyuu', 'kisoku'], '← ジムショの城下町', 'ロウキの城下町')
+town('tK4', 'town9', 'K4', 'ロウキの城下町', 'yume8', 'yume9', office='城の役所', back_label='谷をぬけて、ジムショの城下町へ', fwd_label='カンキョウの森へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['朝から晩まで、休みなしで働かされてるんだ。', '昼ごはんを食べるひまもない。'], aiko='K4'),
+    dict(x=12, y=10, look='villager2', talk=['有給休暇？ そんなもの、とったことがないね。', '妻は妊娠中なのに、夜中まで働かされている……。']),
+    dict(x=6, y=13, look='child', talk=['お城の時計台に、マントを着た伯爵がいて、時計の針を止めてたよ！']),
+])
+field('yume9', 'field3', '働く人の国 森の入口', 'tK4', (16, 7), 'tE1', ['yasumasen', 'zangyou', 'yuukyuu', 'kisoku'], '← ロウキの城下町', 'カンキョウの森（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）
@@ -126,6 +132,7 @@ W = dict(
     base=dict(
         hero=dict(id='hero', name='ユウ', lv=1, hp=30, mhp=30, mp=8, mmp=8, atk=9, def_=4),
         seiri=dict(id='seiri', name='セイリ', lv=1, hp=26, mhp=26, mp=10, mmp=10, atk=7, def_=5, bonusPrefix='S'),
+        kanki=dict(id='kanki', name='カンキ', lv=20, hp=110, mhp=110, mp=40, mmp=40, atk=26, def_=20, bonusPrefix='EY'),
         houki=dict(id='houki', name='ホウキ', lv=12, hp=70, mhp=70, mp=30, mmp=30, atk=18, def_=13, bonusPrefix='KZ'),
     ),
     memberNames=dict(hero='主人公', seiri='セイリ', houki='ホウキ', kanki='カンキ', sokutei='ソクテイ'),

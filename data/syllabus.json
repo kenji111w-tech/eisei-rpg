@@ -256,6 +256,51 @@
    ]
   },
   {
+   "id": "K-12",
+   "subject": "関係法令",
+   "area": "労働基準法",
+   "item": "労働時間・休憩・休日・管理監督者",
+   "kid_prefixes": [
+    "K4-ROUDOU",
+    "K4-KYUKEI",
+    "K4-KYUJITSU",
+    "K4-KANRI"
+   ]
+  },
+  {
+   "id": "K-13",
+   "subject": "関係法令",
+   "area": "労働基準法",
+   "item": "時間外労働・割増賃金・変形労働時間制",
+   "kid_prefixes": [
+    "K4-36",
+    "K4-WARIMASHI",
+    "K4-HENKEI"
+   ]
+  },
+  {
+   "id": "K-14",
+   "subject": "関係法令",
+   "area": "労働基準法",
+   "item": "年次有給休暇",
+   "kid_prefixes": [
+    "K4-NENKYU"
+   ]
+  },
+  {
+   "id": "K-15",
+   "subject": "関係法令",
+   "area": "労働基準法",
+   "item": "妊産婦の保護・育児時間・生理休暇・就業規則",
+   "kid_prefixes": [
+    "K4-SANZEN",
+    "K4-NINSANPU",
+    "K4-IKUJI",
+    "K4-SEIRI",
+    "K4-SHUGYOKISOKU"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

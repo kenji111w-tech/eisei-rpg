@@ -1845,3 +1845,57 @@ Object.assign(ENEMY_HQ, {
     ctx.fillStyle = '#fff'; ctx.font = `bold ${R * .16}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('36', cx - R * .6, cy - R * .6);
   },
 });
+
+// ===== 衛生管理者RPGの魔物（カンキョウの森の里） =====
+Object.assign(ENEMY_HQ, {
+  // ムシアツ・ジェリー：汗をかいたオレンジ色のゼリー。上からゆげ
+  mushiatsu(ctx, cx, cy, R, t) {
+    const w = 1 + Math.sin(t / 8) * .04; ctx.save(); ctx.translate(cx, cy + R * .2); ctx.scale(w, 2 - w);
+    const g = ctx.createRadialGradient(-R * .2, -R * .3, R * .1, 0, 0, R * .9); g.addColorStop(0, '#ffe0b0'); g.addColorStop(.6, '#f08a40'); g.addColorStop(1, '#a04a18');
+    ctx.fillStyle = g; ctx.globalAlpha = .9; rr(ctx, -R * .75, -R * .6, R * 1.5, R * 1.2, R * .45); ctx.fill(); ctx.restore();
+    eyes(ctx, cx, cy, R * .25, R * .1); ctx.strokeStyle = '#6a2a08'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(cx - R * .15, cy + R * .3); ctx.quadraticCurveTo(cx, cy + R * .22, cx + R * .15, cy + R * .3); ctx.stroke();
+    ctx.fillStyle = 'rgba(140,200,255,.85)'; [[-.55, -.1], [.6, .1], [-.4, .45]].forEach(([dx, dy], i) => { const y = cy + dy * R + ((t / 20 + i / 3) % 1) * R * .2; ctx.beginPath(); ctx.moveTo(cx + dx * R, y - R * .08); ctx.quadraticCurveTo(cx + dx * R + R * .06, y + R * .04, cx + dx * R, y + R * .06); ctx.quadraticCurveTo(cx + dx * R - R * .06, y + R * .04, cx + dx * R, y - R * .08); ctx.fill(); });
+    ctx.save(); ctx.globalAlpha = .5; for (let i = 0; i < 3; i++) glow(ctx, cx + (i - 1) * R * .35, cy - R * (.6 + ((t / 25 + i / 3) % 1) * .35), R * .16, 'rgba(255,255,255,.9)', 'rgba(255,255,255,0)'); ctx.restore();
+  },
+  // ネッチュウ・サラマンダー：炎をまとった赤いトカゲ
+  atsusa(ctx, cx, cy, R, t) {
+    for (let i = 0; i < 6; i++) glow(ctx, cx - R * .3 + i * R * .15, cy - R * (.15 + .1 * Math.sin(t / 4 + i)), R * .22, 'rgba(255,200,80,.8)', 'rgba(255,60,0,0)');
+    const sk = lin(ctx, cx - R, 0, cx + R, 0, ['#ff8a4a', '#e0401a', '#8a1a08']);
+    ctx.strokeStyle = sk; ctx.lineWidth = R * .14; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx - R * .4, cy + R * .3); ctx.quadraticCurveTo(cx - R * .9, cy + R * .4, cx - R * .85 + Math.sin(t / 6) * R * .1, cy - R * .1); ctx.stroke();
+    ctx.fillStyle = sk; ctx.beginPath(); ctx.ellipse(cx, cy + R * .3, R * .55, R * .25, 0, 0, 7); ctx.fill();
+    ctx.lineWidth = R * .08; [-.3, .1, .35].forEach((x, i) => { ctx.beginPath(); ctx.moveTo(cx + x * R, cy + R * .45); ctx.lineTo(cx + x * R + (i - 1) * R * .08, cy + R * .7); ctx.stroke(); });
+    ctx.beginPath(); ctx.ellipse(cx + R * .55, cy + R * .1, R * .28, R * .2, -.3, 0, 7); ctx.fill();
+    eyes(ctx, cx + R * .58, cy + R * .02, R * .09, R * .06);
+    ctx.fillStyle = '#ffe060'; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.arc(cx - R * .3 + i * R * .2, cy + R * .2, R * .04, 0, 7); ctx.fill(); }
+    ctx.fillStyle = '#fff'; ctx.font = `bold ${R * .16}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('WBGT', cx, cy - R * .75);
+  },
+  // マブシ・ミラー：まぶしい光をはね返す、目のついた鏡
+  mabushi(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#c8a050'; ctx.beginPath(); ctx.ellipse(cx, cy, R * .55, R * .72, 0, 0, 7); ctx.fill();
+    const g = ctx.createLinearGradient(cx - R * .5, cy - R * .6, cx + R * .5, cy + R * .6); g.addColorStop(0, '#ffffff'); g.addColorStop(.4, '#c8e0f0'); g.addColorStop(1, '#7a9ab8');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy, R * .47, R * .64, 0, 0, 7); ctx.fill();
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 8; i++) { const a = i / 8 * 6.28 + t / 30; ctx.strokeStyle = `rgba(255,250,200,${.3 + .3 * Math.sin(t / 5 + i)})`; ctx.lineWidth = R * .05; ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * R * .65, cy + Math.sin(a) * R * .8); ctx.lineTo(cx + Math.cos(a) * R * 1.0, cy + Math.sin(a) * R * 1.05); ctx.stroke(); } ctx.restore();
+    eyes(ctx, cx, cy - R * .1, R * .18, R * .09);
+    ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.beginPath(); ctx.ellipse(cx - R * .22, cy - R * .38, R * .08, R * .16, -.5, 0, 7); ctx.fill();
+  },
+  // ヨドミ・ガス：灰色によどんだガスの雲。中にCO2の文字
+  yodomi(ctx, cx, cy, R, t) {
+    for (let i = 0; i < 10; i++) { const a = i / 10 * 6.28 + t / 40; glow(ctx, cx + Math.cos(a) * R * .45, cy + Math.sin(a) * R * .35, R * .38, 'rgba(150,150,140,.85)', 'rgba(90,90,80,0)'); }
+    glow(ctx, cx, cy, R * .55, 'rgba(170,170,160,1)', 'rgba(110,110,100,.3)');
+    eyes(ctx, cx, cy - R * .05, R * .2, R * .09);
+    ctx.fillStyle = 'rgba(60,60,60,.85)'; ctx.font = `bold ${R * .2}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('CO₂', cx, cy + R * .3);
+    ctx.fillStyle = 'rgba(100,100,90,.6)'; for (let i = 0; i < 5; i++) { const ph = (t / 30 + i / 5) % 1; ctx.beginPath(); ctx.arc(cx + Math.sin(i * 2.3) * R * .8, cy - R * .2 - ph * R * .6, R * .05 * (1 - ph), 0, 7); ctx.fill(); }
+  },
+  // ムシブロ・ドラゴン：ゆげの中から首を出す緑の水竜
+  mushiburo(ctx, cx, cy, R, t) {
+    ctx.save(); ctx.globalAlpha = .6; for (let i = 0; i < 8; i++) glow(ctx, cx + (i - 3.5) * R * .25, cy + R * (.7 - ((t / 30 + i / 8) % 1) * .4), R * .3, 'rgba(255,255,255,.9)', 'rgba(255,255,255,0)'); ctx.restore();
+    const sk = lin(ctx, cx - R, 0, cx + R, 0, ['#6ac0a0', '#2a8a6a', '#145a40']);
+    ctx.strokeStyle = sk; ctx.lineWidth = R * .3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx - R * .3, cy + R * .9); ctx.quadraticCurveTo(cx - R * .5, cy + R * .1, cx, cy - R * .25); ctx.stroke();
+    ctx.fillStyle = sk; ctx.beginPath(); ctx.ellipse(cx + R * .15, cy - R * .4, R * .4, R * .28, -.2, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8f0c0'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .1, cy - R * .62); ctx.lineTo(cx + s * R * .2, cy - R * .92); ctx.lineTo(cx + s * R * .28, cy - R * .6); ctx.fill(); });
+    eyes(ctx, cx + R * .1, cy - R * .45, R * .14, R * .07);
+    ctx.fillStyle = '#0a3a2a'; ctx.beginPath(); ctx.ellipse(cx + R * .42, cy - R * .32, R * .06, R * .04, 0, 0, 7); ctx.fill();
+    ctx.save(); ctx.globalAlpha = .7; for (let i = 0; i < 3; i++) glow(ctx, cx + R * (.6 + i * .15), cy - R * (.3 + Math.sin(t / 6 + i) * .05), R * (.12 + i * .04), 'rgba(255,255,255,.9)', 'rgba(255,255,255,0)'); ctx.restore();
+    ctx.fillStyle = '#2a8a6a'; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(cx - R * .42 + i * R * .07, cy + R * (.5 - i * .2)); ctx.lineTo(cx - R * .55 + i * R * .07, cy + R * (.4 - i * .2)); ctx.lineTo(cx - R * .38 + i * R * .07, cy + R * (.38 - i * .2)); ctx.fill(); }
+  },
+});

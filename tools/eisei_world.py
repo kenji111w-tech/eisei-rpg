@@ -115,7 +115,13 @@ town('tK4', 'town9', 'K4', 'ロウキの城下町', 'yume8', 'yume9', office='�
     dict(x=12, y=10, look='villager2', talk=['有給休暇？ そんなもの、とったことがないね。', '妻は妊娠中なのに、夜中まで働かされている……。']),
     dict(x=6, y=13, look='child', talk=['お城の時計台に、マントを着た伯爵がいて、時計の針を止めてたよ！']),
 ])
-field('yume9', 'field3', '働く人の国 森の入口', 'tK4', (16, 7), 'tE1', ['yasumasen', 'zangyou', 'yuukyuu', 'kisoku'], '← ロウキの城下町', 'カンキョウの森（準備中）')
+field('yume9', 'field3', '働く人の国 森の入口', 'tK4', (16, 7), 'tE1', ['yasumasen', 'zangyou', 'yuukyuu', 'kisoku', 'mushiatsu', 'atsusa', 'mabushi', 'yodomi'], '← ロウキの城下町', 'カンキョウの森の里')
+town('tE1', 'town10', 'E1', 'カンキョウの森の里', 'yume9', 'yume10', office='森の管理小屋', bgm='town_chem', back_label='森の入口をぬけて、ロウキの城下町へ', fwd_label='デスクの森の里へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['里の作業小屋が、むしむしして息苦しいんだ。', 'まぶしいのに、手もとは暗い。目がしょぼしょぼするよ。'], aiko='E1'),
+    dict(x=12, y=10, look='villager2', talk=['夏になると、仕事中にたおれる人が出るんだ。', '水を飲むひまも、休むひまもないってさ。']),
+    dict(x=6, y=13, look='child', talk=['森のおくの沼から、白いゆげがもくもく出てるの。何か大きいのがいるよ！']),
+])
+field('yume10', 'field2', '働く人の国 森の小道', 'tE1', (16, 8), 'tE2', ['mushiatsu', 'atsusa', 'mabushi', 'yodomi'], '← カンキョウの森の里', 'デスクの森の里（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

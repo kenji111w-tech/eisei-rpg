@@ -301,6 +301,49 @@
    ]
   },
   {
+   "id": "E-01",
+   "subject": "労働衛生",
+   "area": "作業環境",
+   "item": "温熱の4要素・実効温度・不快指数・至適温度",
+   "kid_prefixes": [
+    "E1-ONNETSU",
+    "E1-JIKKOU",
+    "E1-FUKAI",
+    "E1-SHITEKI"
+   ]
+  },
+  {
+   "id": "E-02",
+   "subject": "労働衛生",
+   "area": "作業環境",
+   "item": "WBGTと温熱の測定器具",
+   "kid_prefixes": [
+    "E1-WBGT",
+    "E1-SOKUTEI"
+   ]
+  },
+  {
+   "id": "E-03",
+   "subject": "労働衛生",
+   "area": "作業環境",
+   "item": "採光と照明・彩色",
+   "kid_prefixes": [
+    "E1-SHOUMEI",
+    "E1-GLARE",
+    "E1-SHIKISAI"
+   ]
+  },
+  {
+   "id": "E-04",
+   "subject": "労働衛生",
+   "area": "作業環境",
+   "item": "換気と必要換気量",
+   "kid_prefixes": [
+    "E1-KANKI",
+    "E1-CO2"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

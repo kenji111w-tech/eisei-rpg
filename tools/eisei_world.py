@@ -35,7 +35,7 @@ def town(mid, base, tid, name, back, fwd, office='保健センター', bgm='town
         e = dict(e)
         if e['type'] == 'stage':
             old = old or e['id'].split('-')[0]; e['id'] = tid + '-' + e['id'].split('-')[1]
-        elif e['type'] == 'exit' and e['y'] >= 14: e['to'] = back
+        elif e['type'] == 'exit' and e['y'] >= 14: e['to'] = back; e['tx'], e['ty'] = e['x'] + 1, 2
         elif e['type'] == 'exit':
             if not fwd: continue
             e['to'] = fwd; e['tx'], e['ty'] = 1, 8
@@ -79,7 +79,13 @@ town('tS2', 'town2', 'S2', 'イキの町', 'yume2', 'yume3', back_label='草原�
     dict(x=11, y=10, look='villager2', talk=['市場の食べ物が、毎晩ごっそり消えるんだ。', '倉庫の砂糖の袋まで、からっぽさ。']),
     dict(x=6, y=13, look='child', talk=['夜、北の洞くつから、ごうごうって大きな寝息が聞こえるの！']),
 ])
-field('yume3', 'field3', '働く人の国 北の街道', 'tS2', (16, 8), 'tS3', ['ikitome', 'kamado', 'shoukaf', 'kanzou'], '← イキの町', 'シンケイの町（準備中）')
+field('yume3', 'field3', '働く人の国 北の街道', 'tS2', (16, 8), 'tS3', ['ikitome', 'kamado', 'shoukaf', 'kanzou', 'nyuron', 'jiritsu', 'pinboke', 'kinniku'], '← イキの町', 'シンケイの町')
+town('tS3', 'town4', 'S3', 'シンケイの町', 'yume3', 'yume4', back_label='草原をぬけて、イキの町へ', fwd_label='リズムの町へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['手足がしびれて、思うように動かないんだ。', '夕方になると、暗くて何も見えなくなる。'], aiko='S3'),
+    dict(x=12, y=10, look='villager2', talk=['町じゅうに、細い白い糸が張りめぐらされている。', 'さわると、ぴりっとしびれるんだ。']),
+    dict(x=6, y=13, look='child', talk=['時計台の上に、大きな8本足の影がいたよ！']),
+])
+field('yume4', 'field2', '働く人の国 西の高原', 'tS3', (16, 8), 'tS4', ['nyuron', 'jiritsu', 'pinboke', 'kinniku'], '← シンケイの町', 'リズムの町（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

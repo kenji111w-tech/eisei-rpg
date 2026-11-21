@@ -65,6 +65,44 @@
    ]
   },
   {
+   "id": "S-09",
+   "subject": "労働生理",
+   "area": "神経",
+   "item": "神経系の分類、脳と脊髄、反射",
+   "kid_prefixes": [
+    "S3-NRV-"
+   ]
+  },
+  {
+   "id": "S-10",
+   "subject": "労働生理",
+   "area": "神経",
+   "item": "自律神経（交感神経・副交感神経）",
+   "kid_prefixes": [
+    "S3-AUT-"
+   ]
+  },
+  {
+   "id": "S-11",
+   "subject": "労働生理",
+   "area": "感覚",
+   "item": "視覚・聴覚・平衡感覚",
+   "kid_prefixes": [
+    "S3-EYE",
+    "S3-EAR"
+   ]
+  },
+  {
+   "id": "S-12",
+   "subject": "労働生理",
+   "area": "感覚・筋肉",
+   "item": "嗅覚・皮膚感覚・深部感覚、筋肉",
+   "kid_prefixes": [
+    "S3-SENSE",
+    "S3-MUSCLE"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

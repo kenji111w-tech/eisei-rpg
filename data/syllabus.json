@@ -334,6 +334,44 @@
    ]
   },
   {
+   "id": "E-05",
+   "subject": "労働衛生",
+   "area": "作業管理",
+   "item": "情報機器作業の環境と作業時間",
+   "kid_prefixes": [
+    "E2-JOHO-KANKYO",
+    "E2-JOHO-JIKAN"
+   ]
+  },
+  {
+   "id": "E-06",
+   "subject": "労働衛生",
+   "area": "健康管理",
+   "item": "情報機器作業の健康診断と作業区分",
+   "kid_prefixes": [
+    "E2-JOHO-KENSHIN",
+    "E2-JOHO-KUBUN"
+   ]
+  },
+  {
+   "id": "E-07",
+   "subject": "労働衛生",
+   "area": "作業管理",
+   "item": "腰痛予防（重量・姿勢・健診）",
+   "kid_prefixes": [
+    "E2-YOUTSU"
+   ]
+  },
+  {
+   "id": "E-08",
+   "subject": "労働衛生",
+   "area": "作業環境",
+   "item": "快適な職場環境の形成",
+   "kid_prefixes": [
+    "E2-KAITEKI"
+   ]
+  },
+  {
    "id": "E-04",
    "subject": "労働衛生",
    "area": "作業環境",

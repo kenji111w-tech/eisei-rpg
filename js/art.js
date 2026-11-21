@@ -1621,3 +1621,60 @@ Object.assign(ENEMY_HQ, {
     ctx.fillStyle = '#c0c0ff'; ctx.font = `${R * .2}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('☾', cx + R * .7, cy - R * .6);
   },
 });
+
+// ===== 衛生管理者RPGの魔物（センニンの城下町） =====
+Object.assign(ENEMY_HQ, {
+  // クウセキ・マネキン：空っぽの役人席にすわる、顔のないマネキン
+  kuseki(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#6a4a2a'; rr(ctx, cx - R * .55, cy - R * .2, R * 1.1, R * .12, R * .03); ctx.fill(); ctx.fillRect(cx - R * .5, cy - R * .1, R * .08, R * .9); ctx.fillRect(cx + R * .42, cy - R * .1, R * .08, R * .9);
+    ctx.fillStyle = '#e8e0d0'; rr(ctx, cx - R * .3, cy - R * .65, R * .6, R * .48, R * .1); ctx.fill();
+    glow(ctx, cx, cy - R * .8, R * .2, '#f4efe4', '#c8bca8');
+    ctx.fillStyle = '#2a2a3a'; ctx.font = `bold ${R * .14}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('？', cx, cy - R * .8);
+    ctx.save(); ctx.translate(cx, cy + R * .25); ctx.rotate(Math.sin(t / 20) * .05); ctx.fillStyle = '#fffbea'; ctx.fillRect(-R * .4, -R * .12, R * .8, R * .24); ctx.strokeStyle = '#a33'; ctx.lineWidth = R * .02; ctx.strokeRect(-R * .38, -R * .1, R * .76, R * .2);
+    ctx.fillStyle = '#a33'; ctx.font = `bold ${R * .12}px sans-serif`; ctx.fillText('担当者不在', 0, 0); ctx.restore();
+  },
+  // ミマワラズ・ナマケモノ：枕をかかえて寝ころぶナマケモノ
+  mujunkai(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 20) * R * .02, fur = lin(ctx, cx - R, 0, cx + R, 0, ['#b89a7a', '#8a6a4a', '#5a4030']);
+    ctx.fillStyle = '#f0f0f8'; rr(ctx, cx - R * .9, cy + R * .25, R * .6, R * .35, R * .15); ctx.fill();
+    ctx.fillStyle = fur; ctx.beginPath(); ctx.ellipse(cx + R * .1, cy + R * .4 + b, R * .8, R * .35, 0, 0, 7); ctx.fill();
+    glow(ctx, cx - R * .5, cy + R * .2 + b, R * .3, '#d8c0a0', '#7a5a3a');
+    ctx.fillStyle = '#5a3a2a'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.ellipse(cx - R * .5 + s * R * .1, cy + R * .18 + b, R * .08, R * .04, s * .3, 0, 7); ctx.fill(); });
+    ctx.strokeStyle = '#2a1a10'; ctx.lineWidth = R * .02; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx - R * .5 + s * R * .1, cy + R * .18 + b, R * .04, .2, 2.9); ctx.stroke(); });
+    ctx.fillStyle = 'rgba(60,60,100,.8)'; ctx.font = `bold ${R * .22}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('Z', cx - R * .2, cy - R * .3 - (t % 50) / 50 * R * .2);
+    ctx.strokeStyle = '#3a2a1a'; ctx.lineWidth = R * .05; [-.1, .3, .7].forEach(x => { ctx.beginPath(); ctx.moveTo(cx + x * R, cy + R * .65); ctx.lineTo(cx + x * R + R * .05, cy + R * .78); ctx.stroke(); });
+  },
+  // ハタラカナイ・ドクター：白衣の幽霊が、聴診器をぶらさげてねそべる
+  hatarakanai(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 15) * R * .05;
+    ctx.save(); ctx.globalAlpha = .95; ctx.fillStyle = '#f4f4f8'; ctx.beginPath(); ctx.moveTo(cx - R * .55, cy + R * .75 + b); ctx.lineTo(cx - R * .45, cy - R * .3 + b); ctx.quadraticCurveTo(cx, cy - R * .55 + b, cx + R * .45, cy - R * .3 + b); ctx.lineTo(cx + R * .55, cy + R * .75 + b);
+    for (let i = 0; i < 4; i++) { const x = cx + R * .55 - (i + 1) * R * .275; ctx.lineTo(x + R * .14, cy + R * .6 + b); ctx.lineTo(x, cy + R * .75 + b); } ctx.fill(); ctx.restore();
+    ctx.strokeStyle = '#c0c4d0'; ctx.lineWidth = R * .02; ctx.beginPath(); ctx.moveTo(cx, cy - R * .3 + b); ctx.lineTo(cx, cy + R * .7 + b); ctx.stroke();
+    glow(ctx, cx, cy - R * .55 + b, R * .28, '#f0e0d0', '#c8a890');
+    ctx.strokeStyle = '#3a3a4a'; ctx.lineWidth = R * .03; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .14, cy - R * .58 + b); ctx.lineTo(cx + s * R * .04, cy - R * .58 + b); ctx.stroke(); });
+    ctx.strokeStyle = '#4a7ac0'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(cx - R * .2, cy - R * .25 + b); ctx.quadraticCurveTo(cx, cy + R * .2 + b, cx + R * .25, cy - R * .25 + b); ctx.stroke(); glow(ctx, cx + R * .05, cy + R * .05 + b, R * .06, '#c0d0e8', '#6a7a90');
+    ctx.fillStyle = '#3ed27a'; ctx.fillRect(cx - R * .38, cy - R * .1 + b, R * .12, R * .04); ctx.fillRect(cx - R * .34, cy - R * .14 + b, R * .04, R * .12);
+  },
+  // ヒラカズ・イインカイ：ほこりだらけの長机に足と目がはえた
+  iinkai(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#7a5a3a'; rr(ctx, cx - R * .95, cy - R * .1, R * 1.9, R * .22, R * .05); ctx.fill();
+    ctx.fillStyle = '#5a4028'; [-.8, .7].forEach(x => ctx.fillRect(cx + x * R, cy + R * .1, R * .1, R * .7 + Math.sin(t / 6 + x) * R * .03));
+    ctx.fillStyle = 'rgba(200,190,170,.55)'; for (let i = 0; i < 10; i++) { ctx.beginPath(); ctx.ellipse(cx - R * .85 + i * R * .19, cy - R * .12, R * .09, R * .03, 0, 0, 7); ctx.fill(); }
+    ctx.fillStyle = '#e8e4d8'; [[-.6, -.35], [-.2, -.38], [.25, -.33]].forEach(([dx, dy]) => { ctx.save(); ctx.translate(cx + dx * R, cy + dy * R); ctx.rotate(dx * .3); ctx.fillRect(-R * .12, -R * .14, R * .24, R * .28); ctx.restore(); });
+    eyes(ctx, cx, cy + R * .3, R * .25, R * .1);
+    ctx.save(); ctx.globalAlpha = .4; for (let i = 0; i < 4; i++) glow(ctx, cx + Math.sin(t / 10 + i) * R * .7, cy - R * (.6 + ((t / 40 + i / 4) % 1) * .4), R * .1, 'rgba(210,200,180,.8)', 'rgba(210,200,180,0)'); ctx.restore();
+  },
+  // ムセンニン大王：王冠をかぶった、だらしない大男
+  musennin(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 18) * R * .03;
+    ctx.fillStyle = '#8a1a2a'; ctx.beginPath(); ctx.moveTo(cx - R * .9, cy + R * .95); ctx.lineTo(cx - R * .7, cy - R * .25 + b); ctx.lineTo(cx + R * .7, cy - R * .25 + b); ctx.lineTo(cx + R * .9, cy + R * .95); ctx.fill();
+    ctx.fillStyle = '#f4f0e8'; ctx.fillRect(cx - R * .8, cy - R * .3 + b, R * 1.6, R * .12);
+    const sk = lin(ctx, cx - R * .6, 0, cx + R * .6, 0, ['#f0c8a0', '#d8a070', '#a87048']);
+    ctx.fillStyle = sk; ctx.beginPath(); ctx.ellipse(cx, cy + R * .35 + b, R * .55, R * .5, 0, 0, 7); ctx.fill();
+    glow(ctx, cx, cy - R * .5 + b, R * .32, '#f8d8b0', '#c08860');
+    eyes(ctx, cx, cy - R * .52 + b, R * .12, R * .07); ctx.fillStyle = '#5a2a1a'; ctx.beginPath(); ctx.arc(cx, cy - R * .35 + b, R * .08, 0, Math.PI); ctx.fill();
+    ctx.fillStyle = lin(ctx, 0, cy - R * 1.05, 0, cy - R * .75, ['#fff0a0', '#e0a820']); ctx.beginPath(); ctx.moveTo(cx - R * .3, cy - R * .78 + b);
+    [-.3, -.2, -.1, 0, .1, .2, .3].forEach((x, i) => ctx.lineTo(cx + x * R, cy - R * (i % 2 ? .85 : 1.02) + b)); ctx.lineTo(cx + R * .3, cy - R * .78 + b); ctx.fill();
+    ctx.save(); ctx.translate(cx + R * .7, cy + R * .1 + b); ctx.rotate(.3); ctx.fillStyle = '#c8a020'; ctx.fillRect(-R * .03, -R * .5, R * .06, R * .8); glow(ctx, 0, -R * .55, R * .08, '#ff6a8a', '#a01830'); ctx.restore();
+  },
+});

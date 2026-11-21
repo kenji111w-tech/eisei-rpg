@@ -91,7 +91,13 @@ town('tS4', 'town5', 'S4', 'リズムの町', 'yume4', 'yume5', back_label='草�
     dict(x=12, y=10, look='villager2', talk=['町の大時計が、昼と夜をでたらめに鳴らすようになった。', 'あれじゃ、体のリズムがくるっちまう。']),
     dict(x=6, y=13, look='child', talk=['夜中に、黒い馬が町を走っていくのを見たよ！ ひづめの音がしなかったの。']),
 ])
-field('yume5', 'field3', '働く人の国 ルールの国ざかい', 'tS4', (16, 7), 'tK1', ['jinzou', 'hormon', 'taion', 'yofukashi'], '← リズムの町', 'ルールの城（準備中）')
+field('yume5', 'field3', '働く人の国 ルールの国ざかい', 'tS4', (16, 7), 'tK1', ['jinzou', 'hormon', 'taion', 'yofukashi', 'kuseki', 'mujunkai', 'hatarakanai', 'iinkai'], '← リズムの町', 'センニンの城下町')
+town('tK1', 'town6', 'K1', 'センニンの城下町', 'yume5', 'yume6', office='城の役所', bgm='town_law', back_label='国ざかいをぬけて、リズムの町へ', fwd_label='ケンシンの城下町へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['この城には、もう何年も、だれも役人がいないんだ。', '席は空っぽのまま。だれが何をするのか、だれも知らない。'], aiko='K1'),
+    dict(x=12, y=10, look='villager2', talk=['城の会議室には、ほこりがつもっている。', '「話し合いなんて時間のむだだ」って、王さまが言ったそうだ。']),
+    dict(x=6, y=13, look='child', talk=['王さまのイスに、王冠をかぶった、だらしない大男がすわってたよ！']),
+])
+field('yume6', 'field2', '働く人の国 ルールの街道', 'tK1', (16, 8), 'tK2', ['kuseki', 'mujunkai', 'hatarakanai', 'iinkai'], '← センニンの城下町', 'ケンシンの城下町（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）
@@ -108,6 +114,7 @@ W = dict(
     base=dict(
         hero=dict(id='hero', name='ユウ', lv=1, hp=30, mhp=30, mp=8, mmp=8, atk=9, def_=4),
         seiri=dict(id='seiri', name='セイリ', lv=1, hp=26, mhp=26, mp=10, mmp=10, atk=7, def_=5, bonusPrefix='S'),
+        houki=dict(id='houki', name='ホウキ', lv=12, hp=70, mhp=70, mp=30, mmp=30, atk=18, def_=13, bonusPrefix='KZ'),
     ),
     memberNames=dict(hero='主人公', seiri='セイリ', houki='ホウキ', kanki='カンキ', sokutei='ソクテイ'),
     subjectByPrefix=dict(S='労働生理', K='関係法令', E='労働衛生', Y='労働衛生（有害）', Z='関係法令（有害）', V='導入', T='導入'),

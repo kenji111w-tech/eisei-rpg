@@ -141,6 +141,35 @@
    ]
   },
   {
+   "id": "K-01",
+   "subject": "関係法令",
+   "area": "衛生管理体制",
+   "item": "衛生管理者の選任・人数・専属・専任・業種・巡視",
+   "kid_prefixes": [
+    "K1-SEN-"
+   ]
+  },
+  {
+   "id": "K-02",
+   "subject": "関係法令",
+   "area": "衛生管理体制",
+   "item": "産業医の選任・専属・巡視・勧告",
+   "kid_prefixes": [
+    "K1-SANG-"
+   ]
+  },
+  {
+   "id": "K-03",
+   "subject": "関係法令",
+   "area": "衛生管理体制",
+   "item": "衛生推進者・総括安全衛生管理者・衛生委員会",
+   "kid_prefixes": [
+    "K1-SUISHIN",
+    "K1-SOUKATSU",
+    "K1-IINKAI"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

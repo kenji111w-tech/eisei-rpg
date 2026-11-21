@@ -9,7 +9,7 @@ import { Field } from './field.js';
 import { Field3D, dir8 } from './field3d.js';
 import { loadAssets, ART_ALIAS } from './art.js';
 import { Battle } from './battle.js';
-import { FORMS, examPool, buildExam, runExam, showResult, nextMockSet, buildRetry, applyConfig } from './exam.js';
+import { FORMS, examPool, buildExam, runExam, showResult, nextMockSet, buildRetry, applyConfig, mockQuestions } from './exam.js';
 
 const BASE = {
   hero: { id: 'hero', name: 'ユウ', lv: 1, hp: 30, mhp: 30, mp: 8, mmp: 8, atk: 9, def: 4 },
@@ -824,7 +824,7 @@ class Game {
     // ホアンの確認：そのステージの五肢択一から2問（未出題を優先）
     const done = new Set(Learn.d.answers.map(a => a.qid));
     const [town, sn] = id.split('-');
-    const pool = this.questions.filter(q => q.town === town && q.stage === Number(sn) && q.kind === 'mcq5');
+    const pool = this.questions.filter(q => q.pool !== 'mock' && q.town === town && q.stage === Number(sn) && q.kind === 'mcq5');
     const qs = pool.filter(q => !done.has(q.id)).concat(pool.filter(q => done.has(q.id))).slice(0, 2);
     if (!qs.length) return;
     await say([[G, '事件は解決です。念のため、書類で確かめておきましょう。']]);
@@ -966,25 +966,28 @@ class Game {
     const cleared = (saved && saved.cleared) || {}, all = !!(saved && saved.flags && saved.flags.cleared);
     const pool = examPool(this.questions, cleared, all);
     const cnt = sj => pool.filter(q => q.subject === sj).length;
-    await say(['試験センターへようこそ。ここでは本番と同じ形の模擬試験が受けられます。「練習模試」は冒険で出てくる問題から組みます。物語をクリアすると、初めて見る問題だけの「本番模試」（模試専用問題・6回分）も受けられます。',
+    await say(['試験センターへようこそ。ここでは本番と同じ形の模擬試験が受けられます。「練習模試」は冒険で出てくる問題から組みます。物語をクリアすると、初めて見る問題だけの「本番模試」（模試専用問題）も受けられます。',
       this.story ? this.story.examRule : '本番は、法令15問・物理・化学10問・性質・消火10問の35問を2時間で解きます。科目ごとに6割以上正解すれば合格です。1科目でも6割に届かないと不合格です。',
       all ? '物語をクリアしたので、すべての範囲から出題します。' : this.story ? `出題は、冒険でもう習った範囲だけです（今は ${this.story.subjects.slice(0, 3).map(sj => `${sj}${cnt(sj)}問`).join('・')} の中から）。` + `` : `出題は、冒険でもう習った範囲だけです（今は 法令${cnt('法令')}問・物理・化学${cnt('物理・化学')}問・性質・消火${cnt('性質・消火')}問 の中から）。冒険を進めると範囲が広がります。`]);
     const run = Learn.d.mockRun;
     if (run) { // 本番模試の途中で閉じた：続きから（時計は進んでいる）
-      const qs = run.ids.map(id => this.qById[id]).filter(Boolean), form = { ...FORMS.honban, set: run.set };
-      await say(`本番模試（第${run.set}回）の途中です。続きから再開します。アプリを閉じていた間も時間は進んでいます。`);
+      const rk = run.key || 'honban', qs = run.ids.map(id => this.qById[id]).filter(Boolean), form = { ...FORMS[rk], key: rk, set: run.set };
+      await say(`${FORMS[rk].name}（第${run.set}回）の途中です。続きから再開します。アプリを閉じていた間も時間は進んでいます。`);
       Learn.examMode = true; const r = await runExam(this.ui, qs, form, run); Learn.examMode = false;
       if (!r.aborted) await showResult(r, this.qById, kid => this.whereTaught(kid), kid => this.areaOf(kid)); return;
     }
-    const hist = Learn.d.mocks || [], nset = nextMockSet(this.questions);
-    const items = Object.entries(FORMS).filter(([k]) => k !== 'retry' || (all && !nset)).map(([k, f]) => ({ label: f.name, value: k, disabled: k === 'honban' && (!all || !nset), note: k === 'honban' ? (!all ? '物語をクリアすると受けられます' : nset ? `第${nset}回` : '6回分を受け終えました') : k === 'retry' ? '判定には数えません' : '' }));
+    const hist = Learn.d.mocks || [], nsets = {}; for (const k of Object.keys(FORMS)) if (FORMS[k].mock) nsets[k] = nextMockSet(this.questions, k);
+    const nset = nsets.honban, nAll = [...new Set(this.questions.filter(q => q.pool === 'mock').map(q => q.mock_set))].length;
+    const items = Object.entries(FORMS).filter(([k]) => k !== 'retry' || (all && !nset)).map(([k, f]) => ({ label: f.name, value: k, disabled: !!f.mock && (!all || !nsets[k]), note: f.mock ? (!all ? '物語をクリアすると受けられます' : nsets[k] ? `第${nsets[k]}回` : `${nAll}回分を受け終えました`) : k === 'retry' ? '判定には数えません' : '' }));
     if (hist.length) items.push({ label: 'これまでの成績', value: 'hist' });
     const v = await choose('どれを受けますか？', items); if (!v) return;
     if (v === 'hist') { await say(['【これまでの模試】'].concat(hist.slice(-10).map(h => `${h.day} ${h.form}：` + Object.entries(h.by).map(([sj, x]) => `${sj}${x.ok}/${x.n}`).join('・') + (h.pass ? '　合格' : '　不合格')))); return this.examCenter(saved); }
-    const form = v === 'honban' ? { ...FORMS.honban, set: nset } : FORMS[v];
-    if (v === 'retry') { const ok = await choose('再挑戦模試は、模試専用問題のうち前回から30日以上たった問題を中心に35問を組みます。既出の問題を含むので、推奨条件の判定には数えません。始めますか？', [{ label: '始める', value: 1 }]); if (!ok) return; Learn.examMode = true; Learn.subject = '模試'; const r = await runExam(this.ui, buildRetry(this.questions), FORMS.retry); Learn.examMode = false; await showResult(r, this.qById, kid => this.whereTaught(kid), kid => this.areaOf(kid)); return; }
-    if (v === 'honban') { const ok = await choose(`本番模試 第${nset}回。模試専用の問題35問を2時間で解きます。途中でアプリを閉じても時間は進み、開き直すと続きから再開します。中断すると判定に数えません。2時間とれますか？`, [{ label: '始める', value: 1 }]); if (!ok) return;
-      const qs = this.questions.filter(q => q.pool === 'mock' && q.mock_set === nset); Learn.examMode = true; Learn.subject = '模試';
+    const form = FORMS[v].mock ? { ...FORMS[v], key: v, set: nsets[v] } : FORMS[v];
+    if (v === 'retry') { const ok = await choose(`再挑戦模試は、模試専用問題のうち前回から30日以上たった問題を中心に${Object.values(FORMS.retry.parts).reduce((a, b) => a + b, 0)}問を組みます。既出の問題を含むので、推奨条件の判定には数えません。始めますか？`, [{ label: '始める', value: 1 }]); if (!ok) return; Learn.examMode = true; Learn.subject = '模試'; const r = await runExam(this.ui, buildRetry(this.questions), FORMS.retry); Learn.examMode = false; await showResult(r, this.qById, kid => this.whereTaught(kid), kid => this.areaOf(kid)); return; }
+    if (form.mock) { const qs0 = this.story ? mockQuestions(this.questions, form, form.set) : this.questions.filter(q => q.pool === 'mock' && q.mock_set === form.set), hh = Math.round(form.minutes / 60 * 10) / 10;
+      if (form.note) await say(form.note);
+      const ok = await choose(`${form.name} 第${form.set}回。模試専用の問題${qs0.length}問を${hh}時間で解きます。途中でアプリを閉じても時間は進み、開き直すと続きから再開します。中断すると判定に数えません。${hh}時間とれますか？`, [{ label: '始める', value: 1 }]); if (!ok) return;
+      const qs = qs0; Learn.examMode = true; Learn.subject = '模試';
       const r = await runExam(this.ui, qs, form); Learn.examMode = false; if (r.aborted) { await say('中断しました。この回は判定に数えません。'); return; } await showResult(r, this.qById, kid => this.whereTaught(kid), kid => this.areaOf(kid)); return; }
     const short = Object.entries(form.parts).filter(([sj, n]) => cnt(sj) < n);
     if (short.length === Object.keys(form.parts).length && short.every(([sj]) => cnt(sj) === 0)) { await say('まだ習った範囲がありません。冒険を進めてから来てください。'); return; }

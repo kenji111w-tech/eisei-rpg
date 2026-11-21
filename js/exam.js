@@ -8,6 +8,8 @@ export const FORMS = {
   honban: { name: '本番模試（初見・模試専用問題35問・2時間）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 120, mock: true },
   full: { name: '練習模試（本番形式35問・2時間）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 120 },
   retry: { name: '再挑戦模試（既出問題を含む・35問・2時間）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 120, retry: true },
+  honban1: { name: '本番模試（第一種）', parts: {}, minutes: 180, mock: true, hidden: true },
+  full1: { name: '練習模試（第一種）', parts: {}, minutes: 180, hidden: true },
   menjo: { name: '練習模試（科目免除：性質・消火10問・35分）', parts: { '性質・消火': 10 }, minutes: 35, note: '乙種の他の類の免状を持っている人は、法令と物理・化学が免除されます。' },
   weak: { name: '苦手中心の練習模試（35問・時間制限なし）', parts: { '法令': 15, '物理・化学': 10, '性質・消火': 10 }, minutes: 0, weak: true },
 };
@@ -15,11 +17,13 @@ export const FORMS = {
 export const CONF = { passRate: .6, totalRate: 0, recommend: { count: 3, rate: .8 } };
 export function applyConfig(c) { // data/config/exam.json の内容で上書きする
   if (!c) return; if (c.passRate) CONF.passRate = c.passRate; if (c.totalRate) CONF.totalRate = c.totalRate; if (c.recommend) CONF.recommend = c.recommend;
-  for (const [k, f] of Object.entries(c.forms || {})) if (FORMS[k]) Object.assign(FORMS[k], f);
+  for (const [k, f] of Object.entries(c.forms || {})) if (FORMS[k]) { Object.assign(FORMS[k], f); if (f.parts) FORMS[k].hidden = false; }
+  for (const k of Object.keys(FORMS)) if (FORMS[k].hidden) delete FORMS[k]; // 設定にない形（第一種など）は出さない
 }
 // 出題できる問題：習ったステージの五肢択一だけ（教える前に問わない）
 export function examPool(questions, cleared, all = false) {
-  return questions.filter(q => q.kind === 'mcq5' && !q.call && q.pool === 'practice' && q.topic !== 'identify' && q.subject in FORMS.full.parts &&
+  const SJ = new Set(Object.values(FORMS).flatMap(f => Object.keys(f.parts)));
+  return questions.filter(q => q.kind === 'mcq5' && !q.call && q.pool === 'practice' && q.topic !== 'identify' && SJ.has(q.subject) &&
     (all || q.town === 'V0' || cleared[`${q.town}-${q.stage}`]));
 }
 
@@ -49,7 +53,7 @@ export function runExam(layer, qs, form, resume = null) {
     const root = el('div', 'win exam'); layer.appendChild(root);
     const ans = resume ? resume.ans : qs.map(() => null), mark = resume ? resume.mark : qs.map(() => false), orders = resume ? resume.orders : qs.map(q => shuffle(q.choices.map((c, i) => i)));
     const t0 = resume ? resume.t0 : Date.now(), limit = form.minutes * 60e3; let cur = 0, timer = null, maxEl = resume ? resume.maxEl || 0 : 0;
-    const persist = () => { if (!form.mock) return; Learn.d.mockRun = { set: form.set, ids: qs.map(q => q.id), ans, mark, orders, t0, maxEl }; Learn.save(); };
+    const persist = () => { if (!form.mock) return; Learn.d.mockRun = { key: form.key || 'honban', set: form.set, ids: qs.map(q => q.id), ans, mark, orders, t0, maxEl }; Learn.save(); };
     persist();
     const head = el('div', 'exhead'), tm = el('span', 'extime'), prog = el('span', 'exprog'); head.append(prog, tm); root.appendChild(head);
     const body = el('div', 'exbody'); root.appendChild(body);
@@ -87,15 +91,16 @@ export function runExam(layer, qs, form, resume = null) {
     let done = false;
     const end = (timeUp, aborted = false) => {
       if (done) return; done = true; clearInterval(timer); root.remove();
-      if (form.mock) { delete Learn.d.mockRun; (Learn.d.mockSetsUsed = Learn.d.mockSetsUsed || []).includes(form.set) || Learn.d.mockSetsUsed.push(form.set); Learn.save(); }
+      if (form.mock) { delete Learn.d.mockRun; const key = mockKey(form); (Learn.d.mockSetsUsed = Learn.d.mockSetsUsed || []).includes(key) || Learn.d.mockSetsUsed.push(key); Learn.save(); }
       if (aborted) return res({ aborted: true });
       const ms = Math.min(elapsed(), limit || Infinity), by = {};
       qs.forEach((q, i) => { const c = ans[i] === q.answer; (by[q.subject] = by[q.subject] || { n: 0, ok: 0 }).n++; if (c) by[q.subject].ok++;
         Learn.record(q, { correct: c, unsure: mark[i], hint: false, mode: 'mock', order: orders[i], ms: Math.round(ms / qs.length) }); });
-      const tot = Object.values(by).reduce((a, v) => [a[0] + v.ok, a[1] + v.n], [0, 0]);
+      const pt = sj => (form.points || {})[sj] || 1; // 1問の配点（第一種は有害業務の範囲が8点、ほかは10点）
+      const tot = Object.entries(by).reduce((a, [sj, v]) => [a[0] + v.ok * pt(sj), a[1] + v.n * pt(sj)], [0, 0]);
       const pass = Object.values(by).every(v => v.ok / v.n >= CONF.passRate) && (!CONF.totalRate || tot[0] / Math.max(1, tot[1]) >= CONF.totalRate);
       const r = { day: studyDay(), // 日本時間の学習日（朝4時区切り）。UTCだと朝9時前が前日になってしまう
-         form: form.name, by, pass, ms, timeUp, first: !!form.mock, ids: qs.map(q => q.id), ok: qs.map((q, i) => ans[i] === q.answer), wrong: qs.map((q, i) => ({ q, a: ans[i] })).filter(x => x.a !== x.q.answer).map(x => ({ id: x.q.id, a: x.a })) };
+         form: form.name, by, pass, ms, timeUp, tot, first: !!form.mock, ids: qs.map(q => q.id), ok: qs.map((q, i) => ans[i] === q.answer), wrong: qs.map((q, i) => ({ q, a: ans[i] })).filter(x => x.a !== x.q.answer).map(x => ({ id: x.q.id, a: x.a })) };
       (Learn.d.mocks = Learn.d.mocks || []).push({ day: r.day, form: r.form, by, pass, ms, first: !!form.mock, set: form.set || null }); Learn.save();
       res(r);
     };
@@ -106,9 +111,11 @@ export function runExam(layer, qs, form, resume = null) {
 export async function showResult(r, qById, where = null, areaOf = null) {
   const lines = [`【採点結果】${r.form}${r.timeUp ? '（時間切れ）' : ''}`];
   for (const [sj, v] of Object.entries(r.by)) { const p = Math.round(v.ok / v.n * 100); lines.push(`${sj}：${v.ok}／${v.n}問（${p}%）${v.ok / v.n >= CONF.passRate ? '　合格ライン到達' : '　あと' + (Math.ceil(v.n * CONF.passRate - 1e-9) - v.ok) + '問'}`); }
-  lines.push(r.pass ? '判定：合格！ すべての科目で6割以上です。' : '判定：不合格……。1科目でも6割に届かないと不合格です。');
+  const pr = Math.round(CONF.passRate * 100), trr = Math.round(CONF.totalRate * 100);
+  if (CONF.totalRate && r.tot) lines.push(`合計：${r.tot[0]}／${r.tot[1]}点（${Math.round(r.tot[0] / Math.max(1, r.tot[1]) * 100)}%）${r.tot[0] / Math.max(1, r.tot[1]) >= CONF.totalRate ? '　合格ライン到達' : `　合格ラインは${trr}%`}`);
+  lines.push(r.pass ? (CONF.totalRate ? `判定：合格！ すべての科目で${pr}%以上、合計も${trr}%以上です。` : `判定：合格！ すべての科目で${pr}%以上です。`) : (CONF.totalRate ? `判定：不合格……。科目ごとに${pr}%以上、かつ合計${trr}%以上が必要です。` : `判定：不合格……。1科目でも${pr}%に届かないと不合格です。`));
   lines.push(`かかった時間：${fmtMin(r.ms / 1e3)}`);
-  if (r.first) { const rc = recommend(); lines.push(rc.ok ? '初見模試を3回連続、3科目とも80%以上。推奨条件を満たしました。本番に挑戦しましょう！' : `推奨条件（初見模試3回連続・各科目80%以上）：直近${rc.n}回分で判定中。`); }
+  if (r.first) { const rc = recommend(); lines.push(rc.ok ? '初見模試を3回連続、どの科目も80%以上。推奨条件を満たしました。本番に挑戦しましょう！' : `推奨条件（初見模試3回連続・各科目80%以上）：直近${rc.n}回分で判定中。`); }
   await say(lines);
   if (areaOf && r.ids) { // 分野別：合格ラインに届かなかった分野
     const ar = {}; r.ids.forEach((id, i) => { const q = qById[id], k = `${q.subject}／${areaOf(q.knowledge_id)}`; (ar[k] = ar[k] || { n: 0, ok: 0 }).n++; if (r.ok[i]) ar[k].ok++; });
@@ -135,9 +142,17 @@ export function recommend() {
   const ok = f.length === R.count && f.every(h => Object.values(h.by).every(v => v.ok / v.n >= R.rate));
   return { n: f.length, ok };
 }
-export function nextMockSet(questions) {
+// 本番模試の使用済みの記録：第二種（honban）は回の番号だけ（乙4と同じ形）、ほかの形は「形:回」
+export function mockKey(form) { return form.key && form.key !== 'honban' ? `${form.key}:${form.set}` : form.set; }
+export function nextMockSet(questions, key = 'honban') {
   const used = new Set(Learn.d.mockSetsUsed || []), sets = [...new Set(questions.filter(q => q.pool === 'mock').map(q => q.mock_set))].sort((a, b) => a - b);
-  return sets.find(s => !used.has(s)) || null;
+  return sets.find(s => !used.has(mockKey({ key, set: s }))) || null;
+}
+// 本番模試の問題：その回の模試専用問題から、形の科目ごとの問題数だけ（番号の若い順）
+export function mockQuestions(questions, form, set) {
+  const out = [];
+  for (const [sj, n] of Object.entries(form.parts)) out.push(...questions.filter(q => q.pool === 'mock' && q.mock_set === set && q.subject === sj).sort((a, b) => a.id < b.id ? -1 : 1).slice(0, n));
+  return out;
 }
 
 // 再挑戦模試：模試専用問題のうち、前回の出題から30日以上たったものを優先して35問を組む

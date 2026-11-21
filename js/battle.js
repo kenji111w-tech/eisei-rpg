@@ -322,7 +322,7 @@ export class Battle {
     this.e.askedBoss = true;
     const town = this.opt.town || 'L1';
     const wk = (this.weak || []).filter(q => q.kind === 'mcq5' && !this.e.used.has(q.id));
-    let pool = wk.length ? wk : this.g.questions.filter(q => q.kind === 'mcq5' && q.town === town && !this.e.used.has(q.id));
+    let pool = wk.length ? wk : this.g.questions.filter(q => q.kind === 'mcq5' && q.pool !== 'mock' && q.town === town && !this.e.used.has(q.id));
     if (!pool.length) pool = this.g.questions.filter(q => q.kind === 'mcq5' && this.taught(q) && !this.e.used.has(q.id) && (!this.e.subjects || this.e.subjects.includes(q.subject)));
     const q = pick(pool); if (!q) return;
     await this.msg(`${this.e.name}「この問いに答えられるか！」`, 900);

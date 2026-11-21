@@ -35,6 +35,14 @@ def ident(enemy, town, stage, kid, text, ch, ans, expl, ce, src='SEIRI', ref=Non
 
 for p in sorted(glob.glob(os.path.join(H, 'eq_*.py'))):
     exec(open(p).read())
+# 模試専用問題の分野名（topic）は、同じ知識の冒険の問題からもらう
+TOPIC = {}
+for x in Q:
+    if x['pool'] == 'practice' and x['topic'] != 'identify': TOPIC.setdefault(x['knowledge_id'], x['topic'])
+for x in Q:
+    if x['pool'] == 'mock':
+        assert x['knowledge_id'] in TOPIC, x['id']
+        x['topic'] = TOPIC[x['knowledge_id']]
 
 json.dump({'data_version': DV, 'questions': Q}, open(sys.argv[1], 'w'), ensure_ascii=False, indent=1)
 from collections import Counter

@@ -1678,3 +1678,65 @@ Object.assign(ENEMY_HQ, {
     ctx.save(); ctx.translate(cx + R * .7, cy + R * .1 + b); ctx.rotate(.3); ctx.fillStyle = '#c8a020'; ctx.fillRect(-R * .03, -R * .5, R * .06, R * .8); glow(ctx, 0, -R * .55, R * .08, '#ff6a8a', '#a01830'); ctx.restore();
   },
 });
+
+// ===== 衛生管理者RPGの魔物（ケンシンの城下町） =====
+Object.assign(ENEMY_HQ, {
+  // ケンシンワスレ・ネズミ：予定表をかじる灰色のネズミ
+  kenwasure(ctx, cx, cy, R, t) {
+    ctx.save(); ctx.translate(cx - R * .45, cy + R * .2); ctx.rotate(-.2); ctx.fillStyle = '#fffbea'; ctx.fillRect(-R * .35, -R * .45, R * .7, R * .8); ctx.strokeStyle = '#8a8a9a'; ctx.lineWidth = R * .015;
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) ctx.strokeRect(-R * .3 + i * R * .15, -R * .3 + j * R * .15, R * .15, R * .15);
+    ctx.fillStyle = '#c03030'; ctx.font = `bold ${R * .1}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('健診', 0, -R * .36); ctx.restore();
+    const g = ctx.createRadialGradient(cx + R * .15, cy, R * .05, cx + R * .2, cy + R * .2, R * .6); g.addColorStop(0, '#c8c8d4'); g.addColorStop(1, '#6a6a7a');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx + R * .25, cy + R * .3, R * .5, R * .4, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx - R * .05, cy + R * .05, R * .3, R * .25, -.4, 0, 7); ctx.fill();
+    [-1, 1].forEach(s => { ctx.fillStyle = '#b0b0c0'; ctx.beginPath(); ctx.arc(cx - R * .05 + s * R * .2, cy - R * .2, R * .14, 0, 7); ctx.fill(); ctx.fillStyle = '#f0b0c0'; ctx.beginPath(); ctx.arc(cx - R * .05 + s * R * .2, cy - R * .2, R * .08, 0, 7); ctx.fill(); });
+    eyes(ctx, cx - R * .08, cy - R * .02, R * .09, R * .06);
+    ctx.fillStyle = '#fff'; ctx.fillRect(cx - R * .26, cy + R * .15 + Math.sin(t / 3) * R * .02, R * .05, R * .07);
+    ctx.strokeStyle = '#d0a0b0'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(cx + R * .7, cy + R * .4); ctx.quadraticCurveTo(cx + R * 1.0, cy + R * .1, cx + R * .85, cy - R * .2); ctx.stroke();
+  },
+  // シンヤギョウ・コウモリ：時計を首にかけた夜のコウモリ
+  shinyagyo(ctx, cx, cy, R, t) {
+    const f = Math.sin(t / 4) * .35;
+    ctx.fillStyle = '#2a2040'; [-1, 1].forEach(s => { ctx.save(); ctx.translate(cx, cy); ctx.scale(s, 1); ctx.rotate(-f * .5); ctx.beginPath(); ctx.moveTo(R * .15, -R * .1); ctx.lineTo(R * .95, -R * .45); ctx.lineTo(R * .85, -R * .1); ctx.lineTo(R * .95, R * .15); ctx.lineTo(R * .7, R * .05); ctx.lineTo(R * .6, R * .3); ctx.lineTo(R * .4, R * .12); ctx.lineTo(R * .15, R * .25); ctx.fill(); ctx.restore(); });
+    glow(ctx, cx, cy, R * .3, '#5a4a7a', '#1a1030');
+    [-1, 1].forEach(s => { ctx.fillStyle = '#2a2040'; ctx.beginPath(); ctx.moveTo(cx + s * R * .1, cy - R * .2); ctx.lineTo(cx + s * R * .22, cy - R * .45); ctx.lineTo(cx + s * R * .26, cy - R * .15); ctx.fill(); });
+    [-1, 1].forEach(s => glow(ctx, cx + s * R * .1, cy - R * .05, R * .05, '#ffe060', 'rgba(255,200,0,.3)'));
+    ctx.fillStyle = '#f0e8d0'; ctx.beginPath(); ctx.arc(cx, cy + R * .25, R * .13, 0, 7); ctx.fill(); ctx.strokeStyle = '#2a2040'; ctx.lineWidth = R * .02; ctx.beginPath(); ctx.moveTo(cx, cy + R * .25); ctx.lineTo(cx, cy + R * .15); ctx.moveTo(cx, cy + R * .25); ctx.lineTo(cx + R * .07, cy + R * .27); ctx.stroke();
+    ctx.fillStyle = '#c0c0ff'; ctx.font = `${R * .22}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('☾', cx - R * .75, cy - R * .7);
+  },
+  // カルテヤブリ・ヤギ：書類をくわえたヤギ
+  karuteyabu(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 6) * R * .02;
+    ctx.fillStyle = '#f0ece4'; ctx.beginPath(); ctx.ellipse(cx + R * .2, cy + R * .3, R * .55, R * .35, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5a4a3a'; [-.15, .05, .35, .55].forEach(x => ctx.fillRect(cx + x * R, cy + R * .55, R * .07, R * .35));
+    ctx.fillStyle = '#e8e4dc'; ctx.beginPath(); ctx.ellipse(cx - R * .4, cy - R * .15 + b, R * .25, R * .32, -.3, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#8a7a5a'; ctx.lineWidth = R * .06; ctx.lineCap = 'round'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx - R * .4 + s * R * .1, cy - R * .4 + b); ctx.quadraticCurveTo(cx - R * .4 + s * R * .3, cy - R * .75 + b, cx - R * .4 + s * R * .1, cy - R * .8 + b); ctx.stroke(); });
+    eyes(ctx, cx - R * .42, cy - R * .2 + b, R * .1, R * .05);
+    ctx.fillStyle = '#d8d0c0'; ctx.beginPath(); ctx.moveTo(cx - R * .5, cy + R * .1 + b); ctx.lineTo(cx - R * .45, cy + R * .3 + b); ctx.lineTo(cx - R * .38, cy + R * .1 + b); ctx.fill();
+    ctx.save(); ctx.translate(cx - R * .65, cy + R * .05 + b); ctx.rotate(-.4 + Math.sin(t / 4) * .1); ctx.fillStyle = '#fffbea'; ctx.fillRect(-R * .2, -R * .12, R * .3, R * .22); ctx.fillStyle = '#4a7ac0'; ctx.fillRect(-R * .17, -R * .08, R * .2, R * .025); ctx.fillRect(-R * .17, -R * .02, R * .15, R * .025); ctx.restore();
+    ctx.fillStyle = 'rgba(255,251,234,.8)'; for (let i = 0; i < 3; i++) { ctx.save(); ctx.translate(cx + R * (-.2 + i * .35), cy - R * (.5 + ((t / 30 + i / 3) % 1) * .4)); ctx.rotate(t / 10 + i); ctx.fillRect(-R * .05, -R * .04, R * .1, R * .08); ctx.restore(); }
+  },
+  // チョウジカン・ゾンビ：ネクタイをしめた、目の下のくまがひどいゾンビ
+  choujikan(ctx, cx, cy, R, t) {
+    const sw = Math.sin(t / 12) * .08; ctx.save(); ctx.translate(cx, cy + R * .9); ctx.rotate(sw); ctx.translate(-cx, -cy - R * .9);
+    ctx.fillStyle = '#3a4a6a'; rr(ctx, cx - R * .4, cy - R * .1, R * .8, R * .9, R * .1); ctx.fill();
+    ctx.fillStyle = '#f4f4f8'; ctx.beginPath(); ctx.moveTo(cx - R * .15, cy - R * .1); ctx.lineTo(cx, cy + R * .15); ctx.lineTo(cx + R * .15, cy - R * .1); ctx.fill();
+    ctx.fillStyle = '#c03030'; ctx.beginPath(); ctx.moveTo(cx - R * .05, cy - R * .05); ctx.lineTo(cx + R * .05, cy - R * .05); ctx.lineTo(cx + R * .04, cy + R * .35); ctx.lineTo(cx, cy + R * .42); ctx.lineTo(cx - R * .04, cy + R * .35); ctx.fill();
+    ctx.fillStyle = '#8ab08a'; [-1, 1].forEach(s => { ctx.save(); ctx.translate(cx + s * R * .4, cy); ctx.rotate(-s * 1.2); ctx.fillRect(0, -R * .07, R * .5, R * .14); ctx.restore(); });
+    glow(ctx, cx, cy - R * .38, R * .3, '#a8c8a0', '#5a7a5a');
+    [-1, 1].forEach(s => { const x = cx + s * R * .12; ctx.fillStyle = 'rgba(60,40,80,.6)'; ctx.beginPath(); ctx.ellipse(x, cy - R * .32, R * .08, R * .05, 0, 0, 7); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, cy - R * .4, R * .055, 0, 7); ctx.fill(); ctx.fillStyle = '#222'; ctx.beginPath(); ctx.arc(x, cy - R * .39, R * .02, 0, 7); ctx.fill(); });
+    ctx.restore();
+    ctx.fillStyle = '#f0e8d0'; ctx.beginPath(); ctx.arc(cx + R * .7, cy - R * .6, R * .17, 0, 7); ctx.fill(); ctx.strokeStyle = '#2a2a3a'; ctx.lineWidth = R * .025; ctx.beginPath(); ctx.moveTo(cx + R * .7, cy - R * .6); ctx.lineTo(cx + R * .7, cy - R * .72); ctx.moveTo(cx + R * .7, cy - R * .6); ctx.lineTo(cx + R * .78, cy - R * .55); ctx.stroke();
+  },
+  // ミジュシン・リッチ：青白い火をともす骨の魔法使い
+  mijushin(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#3a2a5a'; ctx.beginPath(); ctx.moveTo(cx - R * .7, cy + R * .95); ctx.lineTo(cx - R * .4, cy - R * .4); ctx.lineTo(cx + R * .4, cy - R * .4); ctx.lineTo(cx + R * .7, cy + R * .95); ctx.fill();
+    ctx.fillStyle = '#2a1a4a'; ctx.beginPath(); ctx.moveTo(cx - R * .45, cy - R * .3); ctx.quadraticCurveTo(cx, cy - R * 1.15, cx + R * .45, cy - R * .3); ctx.fill();
+    glow(ctx, cx, cy - R * .5, R * .25, '#f4f0e8', '#a8a090');
+    [-1, 1].forEach(s => glow(ctx, cx + s * R * .09, cy - R * .52, R * .06, '#6af0ff', 'rgba(0,200,255,.2)'));
+    ctx.fillStyle = '#2a2a2a'; for (let i = -2; i <= 2; i++) ctx.fillRect(cx + i * R * .05 - R * .015, cy - R * .38, R * .03, R * .06);
+    ctx.strokeStyle = '#d8d0c0'; ctx.lineWidth = R * .05; ctx.beginPath(); ctx.moveTo(cx + R * .55, cy - R * .6); ctx.lineTo(cx + R * .55, cy + R * .9); ctx.stroke();
+    for (let i = 0; i < 3; i++) glow(ctx, cx + R * .55 + Math.sin(t / 5 + i) * R * .05, cy - R * (.7 + i * .08), R * (.14 - i * .03), 'rgba(140,240,255,.95)', 'rgba(40,120,255,0)');
+    ctx.save(); ctx.translate(cx - R * .5, cy + R * .2); ctx.rotate(.3); ctx.fillStyle = '#fffbea'; ctx.fillRect(-R * .15, -R * .2, R * .3, R * .4); glow(ctx, 0, -R * .2, R * .1, 'rgba(255,150,50,.9)', 'rgba(255,60,0,0)'); ctx.restore();
+  },
+});

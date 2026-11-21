@@ -45,7 +45,7 @@ async def main():
         if ONLY:
             pre = {'S2': 1, 'S3': 2, 'S4': 3, 'K1': 4, 'K2': 5}[ONLY[0]]
             towns = ['S1', 'S2', 'S3', 'S4', 'K1'][:pre]
-            await pg.evaluate("(ts) => { const g=window.__game, s=g.state; ts.forEach(t=>['1','2','3','4','boss'].forEach(k=>s.cleared[t+'-'+k]=true)); s.flags.join_seiri=true; s.flags.hoan=true; s.members.seiri=JSON.parse(JSON.stringify(g.world.base.seiri)); s.party= ts.length>=4 ? ['hero'] : ['hero','seiri']; s.skills=['mitate','kakuho']; Object.assign(s.members.hero,{lv:12,mhp:80,hp:80,mmp:30,mp:30,atk:20,def:12}); Object.assign(s.members.seiri,{lv:12,mhp:70,hp:70,mmp:30,mp:30,atk:18,def:12}); }", towns)
+            await pg.evaluate("(ts) => { const g=window.__game, s=g.state; ts.forEach(t=>['1','2','3','4','boss'].forEach(k=>s.cleared[t+'-'+k]=true)); s.flags.join_seiri=true; s.flags.hoan=true; s.members.seiri=JSON.parse(JSON.stringify(g.world.base.seiri)); s.party= ts.length>=5 ? ['hero','houki'] : ts.length>=4 ? ['hero'] : ['hero','seiri']; if (ts.length>=5) { s.flags.join_houki=true; s.members.houki=JSON.parse(JSON.stringify(g.world.base.houki)); } s.skills=['mitate','kakuho']; Object.assign(s.members.hero,{lv:12,mhp:80,hp:80,mmp:30,mp:30,atk:20,def:12}); Object.assign(s.members.seiri,{lv:12,mhp:70,hp:70,mmp:30,mp:30,atk:18,def:12}); }", towns)
             FLD = {'S2': 'yume2', 'S3': 'yume3', 'S4': 'yume4', 'K1': 'yume5', 'K2': 'yume6'}
             for T, fld in [(t, FLD[t]) for t in ONLY]:
                 for to in [fld, 't' + T]:

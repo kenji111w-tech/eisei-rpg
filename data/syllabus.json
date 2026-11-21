@@ -170,6 +170,49 @@
    ]
   },
   {
+   "id": "K-04",
+   "subject": "関係法令",
+   "area": "健康管理",
+   "item": "雇入時・定期健康診断",
+   "kid_prefixes": [
+    "K2-YATOI",
+    "K2-TEIKI"
+   ]
+  },
+  {
+   "id": "K-05",
+   "subject": "関係法令",
+   "area": "健康管理",
+   "item": "特定業務・海外派遣・給食従業員の健康診断",
+   "kid_prefixes": [
+    "K2-TOKUTEI",
+    "K2-KAIGAI",
+    "K2-KYUSHOKU"
+   ]
+  },
+  {
+   "id": "K-06",
+   "subject": "関係法令",
+   "area": "健康管理",
+   "item": "健康診断の記録・通知・意見聴取・報告",
+   "kid_prefixes": [
+    "K2-KOJIN",
+    "K2-TSUCHI",
+    "K2-IKEN",
+    "K2-HOUKOKU"
+   ]
+  },
+  {
+   "id": "K-07",
+   "subject": "関係法令",
+   "area": "健康管理",
+   "item": "長時間労働者の面接指導・ストレスチェック",
+   "kid_prefixes": [
+    "K2-MENSETSU",
+    "K2-STRESS-"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

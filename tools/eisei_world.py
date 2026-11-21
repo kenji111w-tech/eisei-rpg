@@ -97,7 +97,13 @@ town('tK1', 'town6', 'K1', 'センニンの城下町', 'yume5', 'yume6', office=
     dict(x=12, y=10, look='villager2', talk=['城の会議室には、ほこりがつもっている。', '「話し合いなんて時間のむだだ」って、王さまが言ったそうだ。']),
     dict(x=6, y=13, look='child', talk=['王さまのイスに、王冠をかぶった、だらしない大男がすわってたよ！']),
 ])
-field('yume6', 'field2', '働く人の国 ルールの街道', 'tK1', (16, 8), 'tK2', ['kuseki', 'mujunkai', 'hatarakanai', 'iinkai'], '← センニンの城下町', 'ケンシンの城下町（準備中）')
+field('yume6', 'field2', '働く人の国 ルールの街道', 'tK1', (16, 8), 'tK2', ['kuseki', 'mujunkai', 'hatarakanai', 'iinkai', 'kenwasure', 'shinyagyo', 'karuteyabu', 'choujikan'], '← センニンの城下町', 'ケンシンの城下町')
+town('tK2', 'town7', 'K2', 'ケンシンの城下町', 'yume6', 'yume7', office='城の役所', back_label='街道をぬけて、センニンの城下町へ', fwd_label='ジムショの城下町へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['この町じゃ、もう何年も健康診断をしていないんだ。', '自分の体がどうなってるのか、だれもわからない。'], aiko='K2'),
+    dict(x=12, y=10, look='villager2', talk=['毎晩おそくまで働かされて、へとへとだよ。', '相談しようにも、だれに言えばいいのか……。']),
+    dict(x=6, y=13, look='child', talk=['夜中に、ガイコツの魔法使いが、病院の書類を燃やしてたよ！']),
+])
+field('yume7', 'field3', '働く人の国 ルールの丘', 'tK2', (16, 7), 'tK3', ['kenwasure', 'shinyagyo', 'karuteyabu', 'choujikan'], '← ケンシンの城下町', 'ジムショの城下町（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

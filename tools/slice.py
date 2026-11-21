@@ -69,6 +69,21 @@ async def main():
         await pg.evaluate("() => { const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.stage('S1-boss').then(()=>{window.__dd=true; g.field.busy=false;}); }")
         await run(40); await pg.screenshot(path='/tmp/e_boss.png')
         ok = await run(2500, "window.__dd===true"); print('boss', ok, await pg.evaluate("JSON.stringify([window.__game.state.cleared, window.__game.state.flags])"))
+        for T, fld in [('S2', 'yume2')]:
+            for to in [fld, 't' + T]:
+                await pg.evaluate("(to) => { const g=window.__game; window.__dd=false; g.field.busy=true; g.onEvent({type:'exit',to,tx:9,ty:14}).then(()=>{window.__dd=true; g.field.busy=false;}); }", to)
+                await run(80, "window.__dd===true")
+            for k in ['1', '2', '3', '4']:
+                sid = T + '-' + k
+                await pg.evaluate("(sid) => { const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.stage(sid).then(()=>{window.__dd=true; g.field.busy=false;}); }", sid)
+                ok = await run(1500, "window.__dd===true"); print(sid, ok)
+            for i in range(14):
+                if await pg.evaluate(f"window.__game.meter('{T}').pct") >= 80: break
+                await pg.evaluate(f"() => {{ const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.train('{T}').then(()=>{{window.__dd=true; g.field.busy=false;}}); }}")
+                await run(1500, "window.__dd===true")
+            await pg.evaluate(f"() => {{ const g=window.__game; g.healAll(); window.__dd=false; g.field.busy=true; g.stage('{T}-boss').then(()=>{{window.__dd=true; g.field.busy=false;}}); }}")
+            await run(40); await pg.screenshot(path=f'/tmp/e_boss_{T}.png')
+            ok = await run(2500, "window.__dd===true"); print(T, 'boss', ok, await pg.evaluate("JSON.stringify(window.__game.state.cleared)"))
         print('steps', cnt, await pg.evaluate("document.getElementById('ui').innerText.slice(0,200)"))
         print('noq', await pg.evaluate('window.__noq||[]'))
         print('\n'.join(errs) or 'no errors')

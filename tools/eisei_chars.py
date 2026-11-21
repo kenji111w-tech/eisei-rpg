@@ -16,7 +16,7 @@ CH = dict(
                   '合格は科目ごと40%以上・合計60%以上。苦手な科目を作らないことです。']),
     ),
     subjectMember={'労働生理': 'seiri', '関係法令': 'houki', '関係法令（有害）': 'houki', '労働衛生': 'kanki', '労働衛生（有害）': 'sokutei'},
-    boss={'S1-boss': dict(lie='肺動脈には、酸素たっぷりの動脈血が流れているのだ！', who='セイリ', fix='肺動脈に流れるのは静脈血。酸素の多い動脈血が流れるのは肺静脈よ。名前と中身が逆なの。')},
+    boss={'S2-boss': dict(lie='基礎代謝量とは、ぐっすり眠っているときに使うエネルギーのことだ！', who='セイリ', fix='基礎代謝量は、目覚めて横になり、安静にしているときの最小限のエネルギーよ。睡眠中ではないわ。'), 'S1-boss': dict(lie='肺動脈には、酸素たっぷりの動脈血が流れているのだ！', who='セイリ', fix='肺動脈に流れるのは静脈血。酸素の多い動脈血が流れるのは肺静脈よ。名前と中身が逆なの。')},
 )
 json.dump(CH, open(os.path.join(D, 'characters.json'), 'w'), ensure_ascii=False, indent=1)
 
@@ -28,13 +28,22 @@ AK = dict(tips=[
     dict(id='AK102', town='S1', topic='凝固と凝集', word='「凝集原」「凝集素」', ans='これが出たら「凝集」（血液型）。「フィブリノーゲン」「フィブリン」が出たら「凝固」。'),
     dict(id='AK103', town='S1', topic='血液の成分', word='「ヘマトクリット」', ans='赤血球の容積の割合。男女差がある（男性約45%・女性約40%）。「男女差はない」は誤り。'),
     dict(id='AK104', town='S1', topic='免疫', word='「抗原」と「抗体」', ans='異物が抗原、体が作るたんぱく質（免疫グロブリン）が抗体。入れかえたら誤り。'),
-], freq=['心臓と循環', '凝固と凝集', '免疫'])
+    dict(id='AK201', town='S2', topic='代謝', word='「基礎代謝量」', ans='覚醒・横臥・安静時の最小限のエネルギー。「睡眠中」と出たら誤り。'),
+    dict(id='AK202', town='S2', topic='代謝', word='「エネルギー代謝率」', ans='動的筋作業の強さの目安。「精神的作業」「静的筋作業」に使えるとあれば誤り。'),
+    dict(id='AK203', town='S2', topic='栄養と消化', word='「胆汁」', ans='肝臓で作られ、消化酵素はふくまない。脂肪を乳化して消化を助ける。'),
+    dict(id='AK204', town='S2', topic='肝臓', word='「インスリン」と「肝臓」', ans='インスリンを出すのは膵臓。肝臓の仕事として出てきたら誤り。'),
+    dict(id='AK205', town='S2', topic='呼吸', word='「二酸化炭素が増えると」', ans='呼吸中枢（延髄）が刺激され、呼吸は深く速くなる。'),
+], freq=['心臓と循環', '凝固と凝集', '免疫', '代謝', '栄養と消化', '肝臓'])
 json.dump(AK, open(os.path.join(D, 'aikotoba.json'), 'w'), ensure_ascii=False, indent=1)
 
 SY = dict(note='出題範囲を細かい項目に分けたプロジェクト独自のチェックリスト（公式の項目表ではない）。kid_prefixes に一致する knowledge_id の問題があれば網羅済みとみなす。', items=[
     dict(id='S-01', subject='労働生理', area='血液', item='血液の成分（血漿・赤血球・白血球・血小板）', kid_prefixes=['S1-BLD-']),
     dict(id='S-02', subject='労働生理', area='循環', item='心臓の構造と血液循環', kid_prefixes=['S1-CIR-']),
     dict(id='S-03', subject='労働生理', area='免疫', item='抗原・抗体、体液性免疫・細胞性免疫', kid_prefixes=['S1-IMM-']),
+    dict(id='S-05', subject='労働生理', area='呼吸', item='呼吸のしくみ（呼吸筋・外呼吸と内呼吸・呼吸中枢）', kid_prefixes=['S2-RESP-']),
+    dict(id='S-06', subject='労働生理', area='代謝', item='代謝・基礎代謝量・エネルギー代謝率', kid_prefixes=['S2-MET-']),
+    dict(id='S-07', subject='労働生理', area='消化', item='栄養素の消化と吸収、胆汁', kid_prefixes=['S2-DIG-']),
+    dict(id='S-08', subject='労働生理', area='肝臓', item='肝臓のはたらき', kid_prefixes=['S2-LIV-']),
     dict(id='S-04', subject='労働生理', area='血液', item='血液の凝固と凝集、血清', kid_prefixes=['S1-COAG', 'S1-AGGL', 'S1-SERUM']),
 ])
 json.dump(SY, open(os.path.join(D, 'syllabus.json'), 'w'), ensure_ascii=False, indent=1)

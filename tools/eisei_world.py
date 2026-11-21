@@ -28,31 +28,67 @@ MAPS['yume1'] = dict(name='働く人の国 はじまりの草原', tiles=tiles('
     dict(x=11, y=15, type='sign', label='↓会社', text='看板：「↓ ハタラク商事（医務室の扉）」'),
     dict(x=11, y=2, type='sign', label='↑町', text='看板：「↑ ミャクの町（からだの国）」'),
 ], npcs=[])
-# ---- ミャクの町（労働生理：血液・循環・免疫） ----
-t1 = BASE['town1']
-ev = []
-for e in t1['events']:
-    e = dict(e)
-    if e['type'] == 'stage': e['id'] = e['id'].replace('L1', 'S1')
-    if e['type'] == 'exit' and e['to'] == 'field': e['to'] = 'yume1'
-    if e['type'] == 'exit' and e['to'] == 'field2': e.update(to='yume2', need='S1-boss', needmsg='（町の東の道は、町の事件が片づくまで通れないようだ）')
-    if e['type'] == 'building' and e['id'] == 'office': e['label'] = '保健センター'
-    if e['type'] == 'sign':
-        if '南' in e['label']: e.update(label='↓南 草原', text='看板：「↓ 南の出口　草原をぬけて、会社へもどる」')
-        else: e.update(label='→東 イキの町', text='看板：「→ 東の出口　イキの町へ（町の事件を解決すると通れる）」')
-    ev.append(e)
-MAPS['tS1'] = dict(name='ミャクの町', tiles=tiles('town1'), encounter=False, bgm='town_law', events=ev, npcs=[
+def town(mid, base, tid, name, back, fwd, office='保健センター', bgm='town_law', npcs=(), back_label='', fwd_label='', fwd_need=True):
+    """乙4の町の地図を借りて、町をつくる。back＝南の出口の行き先、fwd＝東の出口の行き先"""
+    B = BASE[base]; ev = []; old = None
+    for e in B['events']:
+        e = dict(e)
+        if e['type'] == 'stage':
+            old = old or e['id'].split('-')[0]; e['id'] = tid + '-' + e['id'].split('-')[1]
+        elif e['type'] == 'exit' and e['y'] >= 14: e['to'] = back
+        elif e['type'] == 'exit':
+            if not fwd: continue
+            e['to'] = fwd; e['tx'], e['ty'] = 1, 8
+            if fwd_need: e.update(need=tid + '-boss', needmsg='（東の道は、町の事件が片づくまで通れないようだ）')
+            else: e.pop('need', None); e.pop('needmsg', None)
+        elif e['type'] == 'building' and e['id'] == 'office': e['label'] = office
+        elif e['type'] == 'building' and e['id'] not in ('inn', 'shop', 'office'): continue
+        elif e['type'] == 'sign':
+            if '南' in e['label']: e.update(label='↓南 草原', text='看板：「↓ 南の出口　' + back_label + '」')
+            elif fwd: e.update(label='→東', text='看板：「→ 東の出口　' + fwd_label + '（町の事件を解決すると通れる）」')
+            else: continue
+        ev.append(e)
+    MAPS[mid] = dict(name=name, tiles=tiles(base), encounter=False, bgm=bgm, events=ev, npcs=list(npcs))
+
+def field(mid, base, name, back, back_xy, fwd, wild, back_label, fwd_label):
+    """乙4の草原の地図を借りる。西（または南）の出口＝back、北の出口＝fwd"""
+    B = BASE[base]; ev = []
+    for e in B['events']:
+        e = dict(e)
+        if e['type'] == 'stage': continue
+        if e['type'] == 'exit':
+            if e['y'] <= 1: e['to'] = fwd; e['tx'], e['ty'] = (8 if e['x'] == 9 else 9), 14
+            else: e['to'] = back; e['tx'], e['ty'] = back_xy
+            if 'need' in e: continue
+        if e['type'] == 'sign':
+            if e['y'] <= 2: e['text'] = '看板：「↑ ' + fwd_label + '」'; e['label'] = '↑' + fwd_label[:5]
+            elif e['label'].startswith('→'): continue
+            else: e['text'] = '看板：「' + back_label + '」'
+        ev.append(e)
+    MAPS[mid] = dict(name=name, tiles=tiles(base), encounter=True, bgm='field', wild=wild, wildPre=wild[:1], events=ev, npcs=[])
+
+# ---- 第1部 からだの国（労働生理） ----
+town('tS1', 'town1', 'S1', 'ミャクの町', 'yume1', 'yume2', back_label='草原をぬけて、会社へもどる', fwd_label='イキの町へ', npcs=[
     dict(x=5, y=5, look='villager', talk=['朝から、めまいと息切れがひどくて……。', '顔色が悪いって、みんなに言われるんだ。'], aiko='S1'),
     dict(x=11, y=9, look='villager2', talk=['町の赤い川が、どんどん細くなっている。', '川の水が減ると、町じゅうに物が届かなくなるんだ。']),
     dict(x=6, y=12, look='child', talk=['夜になると、黒いマントの人が屋根の上を飛んでるよ！']),
 ])
-# ---- 次の草原（試作品ではここまで） ----
-MAPS['yume2'] = dict(name='働く人の国 東の街道', tiles=tiles('field2'), encounter=False, bgm='field', events=[
-    dict(x=0, y=8, type='exit', to='tS1', tx=16, ty=7),
-    dict(x=1, y=7, type='sign', label='←町', text='看板：「← ミャクの町」'),
-    dict(x=11, y=2, type='sign', label='↑イキの町', text='看板：「↑ イキの町（準備中）」　――試作品は、ここまでです。'),
-], npcs=[])
-for k, v in MAPS_EXTRA.items(): MAPS[k].update(v)
+field('yume2', 'field2', '働く人の国 東の街道', 'tS1', (16, 7), 'tS2', ['hemato', 'shinzou', 'mumeneki', 'katamarazu', 'ikitome', 'kamado', 'shoukaf', 'kanzou'], '← ミャクの町', 'イキの町')
+town('tS2', 'town2', 'S2', 'イキの町', 'yume2', 'yume3', back_label='草原をぬけて、ミャクの町へ', fwd_label='シンケイの町へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['丘の風車が止まってから、町の空気がよどんでる。', '階段をのぼるだけで、息が切れちまうよ。'], aiko='S2'),
+    dict(x=11, y=10, look='villager2', talk=['市場の食べ物が、毎晩ごっそり消えるんだ。', '倉庫の砂糖の袋まで、からっぽさ。']),
+    dict(x=6, y=13, look='child', talk=['夜、北の洞くつから、ごうごうって大きな寝息が聞こえるの！']),
+])
+field('yume3', 'field3', '働く人の国 北の街道', 'tS2', (16, 8), 'tS3', ['ikitome', 'kamado', 'shoukaf', 'kanzou'], '← イキの町', 'シンケイの町（準備中）')
+for k, v in MAPS_EXTRA.items():
+    if k in MAPS: MAPS[k].update(v)
+# まだ作っていない町への出口は、看板に置きかえる（試作品）
+for mid, M in MAPS.items():
+    keep = []
+    for e in M['events']:
+        if e['type'] == 'exit' and e['to'] not in MAPS: e = dict(x=e['x'], y=e['y'] + (1 if e['y'] <= 1 else 0), type='sign', label='準備中', text='この先は、まだ準備中です。――試作品は、ここまでです。')
+        keep.append(e)
+    M['events'] = keep
 
 W = dict(
     maps=MAPS,

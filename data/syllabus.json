@@ -29,6 +29,42 @@
    ]
   },
   {
+   "id": "S-05",
+   "subject": "労働生理",
+   "area": "呼吸",
+   "item": "呼吸のしくみ（呼吸筋・外呼吸と内呼吸・呼吸中枢）",
+   "kid_prefixes": [
+    "S2-RESP-"
+   ]
+  },
+  {
+   "id": "S-06",
+   "subject": "労働生理",
+   "area": "代謝",
+   "item": "代謝・基礎代謝量・エネルギー代謝率",
+   "kid_prefixes": [
+    "S2-MET-"
+   ]
+  },
+  {
+   "id": "S-07",
+   "subject": "労働生理",
+   "area": "消化",
+   "item": "栄養素の消化と吸収、胆汁",
+   "kid_prefixes": [
+    "S2-DIG-"
+   ]
+  },
+  {
+   "id": "S-08",
+   "subject": "労働生理",
+   "area": "肝臓",
+   "item": "肝臓のはたらき",
+   "kid_prefixes": [
+    "S2-LIV-"
+   ]
+  },
+  {
    "id": "S-04",
    "subject": "労働生理",
    "area": "血液",

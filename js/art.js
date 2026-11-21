@@ -1452,3 +1452,63 @@ Object.assign(ENEMY_HQ, {
     ctx.strokeStyle = '#5a0a14'; ctx.lineWidth = R * .02; ctx.beginPath(); ctx.moveTo(cx - R * .1, cy - R * .37); ctx.lineTo(cx + R * .1, cy - R * .37); ctx.stroke();
   },
 });
+
+// ===== 衛生管理者RPGの魔物（イキの町） =====
+Object.assign(ENEMY_HQ, {
+  // イキトメ・バルーン：肺の形の2つの風船。息を止めて青くなる
+  ikitome(ctx, cx, cy, R, t) {
+    const br = 1 + Math.sin(t / 12) * .08;
+    ctx.strokeStyle = '#d8d0c0'; ctx.lineWidth = R * .07; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx, cy - R * .95); ctx.lineTo(cx, cy - R * .35); ctx.moveTo(cx, cy - R * .4); ctx.lineTo(cx - R * .25, cy - R * .2); ctx.moveTo(cx, cy - R * .4); ctx.lineTo(cx + R * .25, cy - R * .2); ctx.stroke();
+    [-1, 1].forEach(s => { ctx.save(); ctx.translate(cx + s * R * .42, cy + R * .15); ctx.scale(br, br);
+      const g = ctx.createRadialGradient(-R * .1, -R * .2, R * .05, 0, 0, R * .55); g.addColorStop(0, '#ffd0e0'); g.addColorStop(.6, '#e86a9a'); g.addColorStop(1, '#8a2a5a');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, R * .38, R * .58, s * .15, 0, 7); ctx.fill(); ctx.restore(); });
+    ctx.fillStyle = 'rgba(80,120,200,.35)'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .2, R * .7, R * .55, 0, 0, 7); ctx.fill();
+    eyes(ctx, cx, cy + R * .05, R * .22, R * .1);
+    ctx.fillStyle = '#3a1a2a'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .32, R * .1, R * .05, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = `bold ${R * .18}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('ムッ', cx + R * .75, cy - R * .6);
+  },
+  // タイシャ・カマド：顔のあるかまど。中で火がもえる
+  kamado(ctx, cx, cy, R, t) {
+    const brick = lin(ctx, 0, cy - R * .6, 0, cy + R * .9, ['#c86a40', '#8a3a20']);
+    ctx.fillStyle = brick; rr(ctx, cx - R * .8, cy - R * .5, R * 1.6, R * 1.4, R * .2); ctx.fill();
+    ctx.strokeStyle = 'rgba(60,20,10,.5)'; ctx.lineWidth = R * .02; for (let y = -.3; y < .9; y += .25) { ctx.beginPath(); ctx.moveTo(cx - R * .8, cy + y * R); ctx.lineTo(cx + R * .8, cy + y * R); ctx.stroke(); }
+    ctx.fillStyle = '#6a6a72'; ctx.fillRect(cx + R * .3, cy - R * .95, R * .25, R * .5);
+    ctx.fillStyle = '#1a0a08'; ctx.beginPath(); ctx.arc(cx, cy + R * .45, R * .42, Math.PI, 0); ctx.lineTo(cx + R * .42, cy + R * .8); ctx.lineTo(cx - R * .42, cy + R * .8); ctx.fill();
+    for (let i = 0; i < 5; i++) { const f = Math.sin(t / 5 + i) * .1; glow(ctx, cx + (i - 2) * R * .15, cy + R * (.55 + f), R * .18, 'rgba(255,230,120,.95)', 'rgba(255,90,20,0)'); }
+    eyes(ctx, cx, cy - R * .15, R * .3, R * .12);
+    ctx.save(); ctx.globalAlpha = .5; for (let i = 0; i < 3; i++) glow(ctx, cx + R * .42, cy - R * (1.05 + ((t / 30 + i / 3) % 1) * .5), R * .12, 'rgba(200,200,200,.8)', 'rgba(200,200,200,0)'); ctx.restore();
+  },
+  // ショウカフリョウ・ワーム：おなかをこわした長い虫
+  shoukaf(ctx, cx, cy, R, t) {
+    for (let i = 6; i >= 0; i--) { const x = cx - R * .8 + i * R * .26, y = cy + R * .35 + Math.sin(t / 8 + i * .8) * R * .12 - (i === 6 ? R * .35 : 0);
+      const g = ctx.createRadialGradient(x - R * .05, y - R * .07, R * .02, x, y, R * .22); g.addColorStop(0, '#f8e0a8'); g.addColorStop(1, i % 2 ? '#c89848' : '#b08038');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, R * (i === 6 ? .3 : .2), 0, 7); ctx.fill(); }
+    const hx = cx + R * .76, hy = cy + Math.sin(t / 8 + 4.8) * R * .12;
+    eyes(ctx, hx, hy - R * .05, R * .1, R * .07);
+    ctx.strokeStyle = '#5a3010'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.moveTo(hx - R * .12, hy + R * .14); ctx.lineTo(hx - R * .04, hy + R * .1); ctx.lineTo(hx + R * .04, hy + R * .15); ctx.lineTo(hx + R * .12, hy + R * .1); ctx.stroke();
+    ctx.fillStyle = 'rgba(120,180,80,.8)'; ctx.font = `bold ${R * .2}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('ぐるる…', cx - R * .2, cy - R * .25);
+  },
+  // カンゾウ・ゴーレム：あずき色の大きな岩。体に倉庫の扉と瓶
+  kanzou(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 14) * R * .03, body = lin(ctx, cx - R, 0, cx + R, 0, ['#b8505a', '#8a2a36', '#5a1820']);
+    ctx.fillStyle = body; ctx.beginPath(); ctx.moveTo(cx - R * .95, cy + R * .2 + b); ctx.quadraticCurveTo(cx - R * .9, cy - R * .75 + b, cx - R * .1, cy - R * .7 + b); ctx.quadraticCurveTo(cx + R * .6, cy - R * .8 + b, cx + R * .8, cy - R * .2 + b); ctx.quadraticCurveTo(cx + R * .95, cy + R * .6 + b, cx + R * .2, cy + R * .85 + b); ctx.quadraticCurveTo(cx - R * .8, cy + R * .9 + b, cx - R * .95, cy + R * .2 + b); ctx.fill();
+    ctx.fillStyle = '#6a4a30'; rr(ctx, cx - R * .2, cy + R * .15 + b, R * .4, R * .55, R * .05); ctx.fill(); ctx.fillStyle = '#e8c040'; ctx.beginPath(); ctx.arc(cx + R * .12, cy + R * .45 + b, R * .03, 0, 7); ctx.fill();
+    [[-.55, .25, '#f0f0f0'], [.5, .2, '#ffe080']].forEach(([dx, dy, c]) => { ctx.fillStyle = c; rr(ctx, cx + dx * R - R * .08, cy + dy * R + b, R * .16, R * .24, R * .04); ctx.fill(); });
+    eyes(ctx, cx, cy - R * .3 + b, R * .28, R * .11);
+    ctx.fillStyle = '#3a0a10'; rr(ctx, cx - R * .15, cy - R * .1 + b, R * .3, R * .06, R * .03); ctx.fill();
+  },
+  // タメコミ・ドラゴン：おなかのふくらんだ緑の竜。食べ物の山の上
+  tamekomi(ctx, cx, cy, R, t) {
+    const b = Math.sin(t / 16) * R * .04;
+    ['#e8c040', '#c86a40', '#f0e0b0'].forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(cx + (i - 1) * R * .45, cy + R * .85, R * .32, R * .14, 0, 0, 7); ctx.fill(); });
+    const sk = lin(ctx, cx - R, 0, cx + R, 0, ['#8ad06a', '#4a9a3a', '#2a5a1e']);
+    ctx.fillStyle = sk; ctx.beginPath(); ctx.ellipse(cx, cy + R * .25 + b, R * .8, R * .62, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8e0a0'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .35 + b, R * .5, R * .45, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(150,130,60,.6)'; ctx.lineWidth = R * .02; for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(cx - R * .4, cy + R * (.35 + i * .13) + b); ctx.lineTo(cx + R * .4, cy + R * (.35 + i * .13) + b); ctx.stroke(); }
+    ctx.fillStyle = '#3a7a2a'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .5, cy - R * .2 + b); ctx.lineTo(cx + s * R * 1.05, cy - R * .75 + b); ctx.lineTo(cx + s * R * .9, cy - R * .2 + b); ctx.fill(); });
+    ctx.fillStyle = sk; ctx.beginPath(); ctx.ellipse(cx, cy - R * .45 + b, R * .42, R * .32, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#f0e8c0'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * R * .2, cy - R * .7 + b); ctx.lineTo(cx + s * R * .3, cy - R * .98 + b); ctx.lineTo(cx + s * R * .35, cy - R * .68 + b); ctx.fill(); });
+    eyes(ctx, cx, cy - R * .5 + b, R * .16, R * .08);
+    ctx.fillStyle = '#1a3a10'; ctx.beginPath(); ctx.arc(cx, cy - R * .3 + b, R * .12, 0, Math.PI); ctx.fill();
+  },
+});

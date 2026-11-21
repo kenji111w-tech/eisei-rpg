@@ -2136,3 +2136,51 @@ Object.assign(ENEMY_HQ, {
     });
   },
 });
+
+// ===== 衛生管理者RPGの魔物（フンジンの鉱山） =====
+Object.assign(ENEMY_HQ, {
+  // ジンパイ・ダスト：細かい白い粉が集まってできた顔
+  jinpai(ctx, cx, cy, R, t) {
+    for (let i = 0; i < 140; i++) { const a = i * 2.399 + t / 60, r = R * .7 * Math.sqrt(i / 140); ctx.fillStyle = `rgba(230,225,210,${.4 + .5 * ((i * 7) % 10) / 10})`; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r * .9, R * (.02 + ((i * 3) % 5) * .006), 0, 7); ctx.fill(); }
+    eyes(ctx, cx, cy - R * .1, R * .2, R * .08);
+    ctx.strokeStyle = '#4a4030'; ctx.lineWidth = R * .03; ctx.beginPath(); ctx.ellipse(cx, cy + R * .22, R * .1, R * .06, 0, 0, 7); ctx.stroke();
+  },
+  // ケイ・サンドワーム：砂から顔を出す巨大なミミズ。石英の結晶の歯
+  keisand(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#d8c090'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .7, R * .9, R * .2, 0, 0, 7); ctx.fill();
+    const sk = lin(ctx, cx - R * .4, 0, cx + R * .4, 0, ['#c8a878', '#a07a50', '#6a4a28']);
+    ctx.strokeStyle = sk; ctx.lineWidth = R * .4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx - R * .1, cy + R * .7); ctx.quadraticCurveTo(cx - R * .4 + Math.sin(t / 10) * R * .1, cy, cx + R * .05, cy - R * .4); ctx.stroke();
+    ctx.strokeStyle = '#6a4a28'; ctx.lineWidth = R * .02; for (let i = 0; i < 5; i++) { const y = cy + R * (.55 - i * .2); ctx.beginPath(); ctx.ellipse(cx - R * .2 + i * R * .04, y, R * .2, R * .05, 0, 0, Math.PI); ctx.stroke(); }
+    ctx.fillStyle = '#3a2010'; ctx.beginPath(); ctx.ellipse(cx + R * .05, cy - R * .45, R * .2, R * .14, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8f4ff'; for (let i = 0; i < 6; i++) { const a = i / 6 * 6.28; ctx.beginPath(); ctx.moveTo(cx + R * .05 + Math.cos(a) * R * .2, cy - R * .45 + Math.sin(a) * R * .14); ctx.lineTo(cx + R * .05 + Math.cos(a) * R * .08, cy - R * .45 + Math.sin(a) * R * .06); ctx.lineTo(cx + R * .05 + Math.cos(a + .3) * R * .19, cy - R * .45 + Math.sin(a + .3) * R * .13); ctx.fill(); }
+    ctx.fillStyle = 'rgba(220,200,160,.6)'; for (let i = 0; i < 8; i++) { const ph = (t / 25 + i / 8) % 1; ctx.beginPath(); ctx.arc(cx + R * (.2 + ph * .6), cy - R * (.5 + ph * .3) + Math.sin(i) * R * .1, R * .03, 0, 7); ctx.fill(); }
+  },
+  // サンケツ・ホール：地面にあいた黒い穴。ふちに目
+  sanketsu(ctx, cx, cy, R, t) {
+    ctx.fillStyle = '#6a5a40'; ctx.beginPath(); ctx.ellipse(cx, cy + R * .2, R * .85, R * .45, 0, 0, 7); ctx.fill();
+    const g = ctx.createRadialGradient(cx, cy + R * .25, R * .05, cx, cy + R * .2, R * .65); g.addColorStop(0, '#000'); g.addColorStop(.8, '#1a1410'); g.addColorStop(1, '#3a2a18');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx, cy + R * .2, R * .65, R * .32, 0, 0, 7); ctx.fill();
+    const o = .5 + .5 * Math.sin(t / 12); ctx.fillStyle = `rgba(255,220,80,${o})`; [-1, 1].forEach(s => { ctx.beginPath(); ctx.ellipse(cx + s * R * .2, cy + R * .15, R * .07, R * .035, 0, 0, 7); ctx.fill(); });
+    ctx.fillStyle = '#fff'; ctx.font = `bold ${R * .18}px sans-serif`; ctx.textAlign = 'center'; ctx.fillText('O₂ ↓', cx, cy - R * .45 - Math.sin(t / 8) * R * .05);
+    ctx.strokeStyle = '#c03030'; ctx.lineWidth = R * .04; ctx.beginPath(); ctx.moveTo(cx - R * .8, cy - R * .2); ctx.lineTo(cx - R * .8, cy - R * .7); ctx.stroke(); ctx.fillStyle = '#ffe040'; ctx.fillRect(cx - R * .95, cy - R * .8, R * .3, R * .15); ctx.fillStyle = '#c03030'; ctx.font = `bold ${R * .1}px sans-serif`; ctx.fillText('立入禁止', cx - R * .8, cy - R * .69);
+  },
+  // チッソ・ボンベ：灰色のガスボンベに顔。口からガス
+  chissoboss(ctx, cx, cy, R, t) {
+    const g = lin(ctx, cx - R * .3, 0, cx + R * .3, 0, ['#c8ccd4', '#8a8e98', '#4a4e58']);
+    ctx.fillStyle = g; rr(ctx, cx - R * .3, cy - R * .55, R * .6, R * 1.35, R * .28); ctx.fill();
+    ctx.fillStyle = '#3a3e48'; ctx.fillRect(cx - R * .1, cy - R * .8, R * .2, R * .27); ctx.fillRect(cx - R * .2, cy - R * .85, R * .4, R * .08);
+    ctx.fillStyle = '#f0f0f0'; ctx.fillRect(cx - R * .3, cy + R * .1, R * .6, R * .2); ctx.fillStyle = '#2a2a2a'; ctx.font = `bold ${R * .15}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('N₂', cx, cy + R * .2);
+    eyes(ctx, cx, cy - R * .2, R * .12, R * .06);
+    ctx.save(); ctx.globalAlpha = .6; for (let i = 0; i < 5; i++) { const ph = (t / 15 + i / 5) % 1; glow(ctx, cx + R * (.25 + ph * .6), cy - R * .82 + Math.sin(ph * 6) * R * .05, R * (.05 + ph * .12), 'rgba(220,230,255,.9)', 'rgba(220,230,255,0)'); } ctx.restore();
+  },
+  // フンジン・ギガース：砂と岩でできた巨人。体から砂がこぼれる
+  funjin(ctx, cx, cy, R, t) {
+    const st = lin(ctx, cx - R, 0, cx + R, 0, ['#e0d0a8', '#b8a070', '#7a6440']);
+    ctx.fillStyle = st; ctx.beginPath(); ctx.moveTo(cx - R * .6, cy + R * .9); ctx.lineTo(cx - R * .5, cy - R * .3); ctx.quadraticCurveTo(cx, cy - R * .55, cx + R * .5, cy - R * .3); ctx.lineTo(cx + R * .6, cy + R * .9); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy - R * .55, R * .28, 0, 7); ctx.fill();
+    const sw = Math.sin(t / 9) * R * .06; ctx.strokeStyle = st; ctx.lineWidth = R * .22; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx - R * .5, cy - R * .2); ctx.lineTo(cx - R * .9, cy + R * .3 + sw); ctx.moveTo(cx + R * .5, cy - R * .2); ctx.lineTo(cx + R * .9, cy - R * .5 - sw); ctx.stroke();
+    ctx.fillStyle = '#5a4428'; for (let i = 0; i < 6; i++) { ctx.beginPath(); ctx.arc(cx + Math.sin(i * 2.1) * R * .35, cy + R * (.1 + i * .12), R * .05, 0, 7); ctx.fill(); }
+    ctx.fillStyle = '#ff8030'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * R * .1, cy - R * .58, R * .05, 0, 7); ctx.fill(); });
+    ctx.fillStyle = 'rgba(220,200,150,.7)'; for (let i = 0; i < 14; i++) { const ph = (t / 20 + i / 14) % 1; ctx.beginPath(); ctx.arc(cx + R * (.9 + Math.sin(i) * .1), cy - R * .5 + ph * R * 1.2, R * .025, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(cx + R * (-.9 + Math.cos(i) * .1), cy + R * .3 + ph * R * .5, R * .02, 0, 7); ctx.fill(); }
+  },
+});

@@ -334,6 +334,24 @@
    ]
   },
   {
+   "id": "Y-05",
+   "subject": "労働衛生（有害）",
+   "area": "粉じん・酸欠",
+   "item": "じん肺と合併症",
+   "kid_prefixes": [
+    "Y2-JINPAI"
+   ]
+  },
+  {
+   "id": "Y-06",
+   "subject": "労働衛生（有害）",
+   "area": "粉じん・酸欠",
+   "item": "酸素欠乏症とその原因・救助",
+   "kid_prefixes": [
+    "Y2-SANKETSU"
+   ]
+  },
+  {
    "id": "Y-01",
    "subject": "労働衛生（有害）",
    "area": "化学物質",

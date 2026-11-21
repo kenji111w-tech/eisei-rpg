@@ -150,7 +150,13 @@ town('tY1', 'town2', 'Y1', 'カガクの鉱山', 'yume13', 'yume14', office='鉱
     dict(x=12, y=10, look='villager2', talk=['精錬所の仲間が、おなかが痛いと言ってたおれた。', '顔色も、ずっと悪いんだ。']),
     dict(x=6, y=13, look='child', talk=['鉱山の奥に、首がいっぱいある大きなヘビがいるんだって！']),
 ])
-field('yume14', 'field3', '働く人の国 坑道ぞいの道', 'tY1', (16, 8), 'tY2', ['yuuki', 'namari', 'gasumore', 'joutai'], '← カガクの鉱山', 'フンジンの鉱山（準備中）')
+field('yume14', 'field3', '働く人の国 坑道ぞいの道', 'tY1', (16, 8), 'tY2', ['yuuki', 'namari', 'gasumore', 'joutai'], '← カガクの鉱山', 'フンジンの鉱山')
+town('tY2', 'town4', 'Y2', 'フンジンの鉱山', 'yume14', 'yume15', office='鉱山の事務所', bgm='town_chem', back_label='坑道ぞいに、カガクの鉱山へ', fwd_label='ブツリの鉱山へ', npcs=[
+    dict(x=5, y=5, look='villager', talk=['何十年も石を切ってきたら、息が苦しくなってな……。', '今はもう、少し歩くだけで息切れだ。'], aiko='Y2'),
+    dict(x=12, y=10, look='villager2', talk=['たて穴に落ちた仲間を助けに入ったやつまで、たおれちまった。', '穴の中には、何もないように見えたのに……。']),
+    dict(x=6, y=13, look='child', talk=['山のてっぺんに、砂でできた大きな人がいるんだよ！']),
+])
+field('yume15', 'field2', '働く人の国 谷ぞいの道', 'tY2', (16, 8), 'tY3', ['jinpai', 'keisand', 'sanketsu', 'chissoboss'], '← フンジンの鉱山', 'ブツリの鉱山（準備中）')
 for k, v in MAPS_EXTRA.items():
     if k in MAPS: MAPS[k].update(v)
 # まだ作っていない町への出口は、看板に置きかえる（試作品）

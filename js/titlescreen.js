@@ -20,7 +20,7 @@ const LAND = `<svg viewBox="0 0 390 260" preserveAspectRatio="xMidYMax slice" cl
   <rect x="50" y="190" width="8" height="8" fill="#ffcf6a" class="win"/><rect x="100" y="194" width="7" height="7" fill="#ffcf6a" class="win"/></svg>`;
 
 function crests() {
-  return `<div class="crests">${[['法', '法令の国', '#4a7bd6'], ['化', '物理・化学の国', '#3aa874'], ['危', '危険物の国', '#d6503a']]
+  return `<div class="crests">${[['生', '労働生理', '#3aa874'], ['法', '関係法令', '#4a7bd6'], ['衛', '労働衛生', '#2f8f52'], ['有', '工場の国', '#d6903a']]
     .map(([c, n, col]) => `<div class="crest"><div class="cc" style="background:${col}">${c}</div><div class="cn">${n}</div></div>`).join('')}</div>`;
 }
 

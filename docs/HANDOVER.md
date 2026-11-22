@@ -30,7 +30,8 @@
 - 試験センター：第二種（本番・全体・弱点・再挑戦）、第一種（honban1/full1、400点満点、有害業務は1問8点）、特例（menjo、有害業務だけ160点満点）。模試は6回分（eq_ZZ_mock1〜6、各50問、id は M{回}-{科目}{番号}）。模試の問題は戦闘には出ない（battle.js の bossQuestion と game.js のステージ確認で除外）。
 - 選択肢の長さのかたより（正解だけが目立って長い）は、択一・場面・模試とも0にした（tools/check_length.py）。直し方は tools/fix/ の FIX を tools/rechoice.py で eq_*.py に書き戻す（選択肢の順番は変えない）。
 - 確認の道具：check_data / check_taught / check_terms / check_length はすべて0。tools/examtest.py '第一種' 1 で試験センターを通しで解く。tools/dumpq.py 町 bad で長さのかたよりを表示。
-- 次の候補：GitHub のリポジトリ（eisei-rpg）ができたら push と Pages の設定、スマホでの通しプレイの確認。運営の形は検討中。
+- 公開：GitHub の kenji111w-tech/eisei-rpg（main の / を GitHub Pages で公開）。https://kenji111w-tech.github.io/eisei-rpg/
+- 次の候補：スマホ実機での通しプレイの確認。運営の形は検討中。
 - 指針の数字は厚労省の資料（情報機器ガイドライン、腰痛指針、メンタルヘルス指針、THP指針、受動喫煙ガイドライン、労働災害動向調査）で確認した。
 
 ## 4. 作り方

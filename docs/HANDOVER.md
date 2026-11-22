@@ -31,6 +31,7 @@
 - 選択肢の長さのかたより（正解だけが目立って長い）は、択一・場面・模試とも0にした（tools/check_length.py）。直し方は tools/fix/ の FIX を tools/rechoice.py で eq_*.py に書き戻す（選択肢の順番は変えない）。
 - 確認の道具：check_data / check_taught / check_terms / check_length はすべて0。tools/examtest.py '第一種' 1 で試験センターを通しで解く。tools/dumpq.py 町 bad で長さのかたよりを表示。
 - 公開：GitHub の kenji111w-tech/eisei-rpg（main の / を GitHub Pages で公開）。https://kenji111w-tech.github.io/eisei-rpg/
+- 11/22：アイコンを衛生管理者用（緑の盾と十字・「衛生」）に差し替え。アイコンのアドレスに ?v=2。外部の中身の見えないエラー（Script error.）は表示しない。README を衛生管理者用に書き直し。
 - 次の候補：スマホ実機での通しプレイの確認。運営の形は検討中。
 - 指針の数字は厚労省の資料（情報機器ガイドライン、腰痛指針、メンタルヘルス指針、THP指針、受動喫煙ガイドライン、労働災害動向調査）で確認した。
 
